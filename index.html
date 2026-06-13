@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'Inter', sans-serif;
     background: #f5f6fa;
@@ -20,6 +20,7 @@
     padding: 2rem 1rem 3rem;
   }
   .wrap { width: 100%; max-width: 480px; }
+
   .header {
     text-align: center;
     background: #fff;
@@ -35,6 +36,7 @@
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 1rem;
     cursor: pointer;
+    transition: border-color .2s;
   }
   .logo-circle:hover { border-color: #f5c518; }
   .org { font-size: 12px; color: #6b7280; margin-bottom: 3px; }
@@ -46,12 +48,14 @@
     padding: 3px 12px; border-radius: 99px; margin-bottom: 8px;
   }
   .slogan { font-size: 13px; color: #6b7280; font-style: italic; }
+
   .sec {
     font-size: 10px; font-weight: 600;
     color: #9ca3af; text-transform: uppercase;
     letter-spacing: .09em;
     margin: 1.25rem 0 .5rem .25rem;
   }
+
   .card {
     background: #fff;
     border: 1px solid #e8eaf0;
@@ -83,29 +87,75 @@
   .btn-desc { font-size: 12px; color: #6b7280; margin-top: 2px; }
   .btn-arr { font-size: 16px; color: #9ca3af; }
   .chevron { transition: transform .2s; }
+
+  .sub-panel { border-top: 1px solid #f3f4f6; }
+  .sub-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 16px 11px 20px;
+    text-decoration: none;
+    color: #111827;
+    background: #fafafa;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background .12s;
+  }
+  .sub-btn:last-child { border-bottom: none; }
+  .sub-btn:hover { background: #f3f4f6; }
+  .sub-icon {
+    width: 30px; height: 30px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 15px;
+  }
+  .sub-label { font-size: 13px; font-weight: 500; flex: 1; }
+
+  /* ── Edit Panel ── */
   .edit-panel {
     border-top: 1px solid #f3f4f6;
     background: #f9fafb;
     padding: 14px 16px;
   }
-  .edit-panel input {
+  .edit-panel input[type=text],
+  .edit-panel input[type=email],
+  .edit-panel input[type=number] {
     width: 100%; padding: 9px 12px;
     border: 1px solid #d1d5db; border-radius: 8px;
     font-size: 14px; font-family: inherit;
     outline: none; margin-bottom: 8px;
+    color: #111827; background: #fff;
+    transition: border .15s;
   }
   .edit-panel input:focus { border-color: #3b82f6; }
+  .hint { font-size: 12px; color: #6b7280; margin-bottom: 10px; }
+
+  /* Nama box */
+  .nama-box {
+    background: #eff6ff; border: 1px solid #bfdbfe;
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;
+    display: none;
+  }
+  .nama-box .nama-label { font-size: 11px; color: #3b82f6; font-weight: 600; }
+  .nama-box .nama-val { font-size: 15px; font-weight: 600; color: #1e40af; margin-top: 2px; }
+  .nama-box .kel-val { font-size: 12px; color: #6b7280; margin-top: 1px; }
+
   .submit-btn {
     width: 100%; padding: 9px;
     background: #1a4a8a; color: #fff;
     border: none; border-radius: 8px;
     font-size: 14px; font-weight: 500;
-    cursor: pointer;
+    font-family: inherit; cursor: pointer;
+    transition: background .12s;
+    margin-bottom: 6px;
   }
   .submit-btn:hover { background: #163d73; }
   .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
-  .err-msg { font-size: 12px; color: #dc2626; margin-top: 7px; display: none; background: #fef2f2; padding: 7px 10px; border-radius: 6px; }
+
+  .err-msg {
+    font-size: 12px; color: #dc2626; margin-top: 7px;
+    display: none; background: #fef2f2;
+    padding: 7px 10px; border-radius: 6px;
+  }
   .loading-msg { font-size: 12px; color: #6b7280; margin-top: 8px; text-align: center; display: none; }
+
+  /* Hasil login */
   .hasil-wrap { margin-top: 10px; display: none; }
   .hasil-title { font-size: 13px; font-weight: 600; color: #065f46; background: #d1fae5; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; }
   .hasil-item {
@@ -117,19 +167,48 @@
   .hasil-id span { font-weight: 600; }
   .hasil-nama { font-size: 11px; color: #6b7280; margin-top: 3px; }
   .hasil-nama span { font-weight: 600; color: #374151; }
+  .flag-badge {
+    font-size: 10px; padding: 2px 7px; border-radius: 99px;
+    font-weight: 600; margin-top: 4px; display: inline-block;
+  }
+  .flag-0 { background: #fef3c7; color: #92400e; }
+  .flag-1 { background: #d1fae5; color: #065f46; }
   .hasil-link {
     display: inline-flex; align-items: center; gap: 5px;
     padding: 6px 12px; background: #1a4a8a; color: #fff;
-    border-radius: 6px; text-decoration: none; font-size: 12px;
-    white-space: nowrap;
+    border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 500;
+    white-space: nowrap; flex-shrink: 0;
+    transition: background .12s; cursor: pointer; border: none;
+    font-family: inherit;
   }
   .hasil-link:hover { background: #163d73; }
   .reset-btn {
     margin-top: 8px; width: 100%; padding: 7px;
     background: #f3f4f6; color: #374151;
     border: 1px solid #e5e7eb; border-radius: 8px;
-    cursor: pointer;
+    font-size: 12px; font-family: inherit; cursor: pointer;
   }
+  .reset-btn:hover { background: #e5e7eb; }
+
+  .disabled-btn {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px 16px;
+    opacity: .5; cursor: not-allowed;
+    background: #fff; border-radius: 14px;
+    border: 1px solid #e8eaf0;
+    margin-bottom: 10px;
+  }
+  .soon-badge {
+    font-size: 11px; background: #fef3c7; color: #92400e;
+    padding: 2px 9px; border-radius: 99px; white-space: nowrap;
+  }
+
+  .footer {
+    text-align: center; font-size: 11px; color: #9ca3af;
+    margin-top: 2rem;
+  }
+
+  /* ── Admin Modal ── */
   .admin-panel {
     background: #fff;
     border: 1px solid #e8eaf0;
@@ -147,8 +226,8 @@
     background: #fff;
     border-radius: 20px;
     width: 90%;
-    max-width: 500px;
-    max-height: 80%;
+    max-width: 520px;
+    max-height: 85vh;
     overflow-y: auto;
     padding: 20px;
   }
@@ -158,31 +237,92 @@
     font-size: 12px;
   }
   .admin-table th, .admin-table td {
-    padding: 8px;
+    padding: 8px 6px;
     text-align: left;
     border-bottom: 1px solid #ddd;
   }
   .admin-table th { background: #1a4a8a; color: white; }
-  .admin-form input {
+  .admin-table tr:hover td { background: #f9fafb; }
+  .close-btn { float: right; font-size: 24px; cursor: pointer; line-height: 1; }
+  .btn-small {
+    padding: 4px 8px; font-size: 11px; margin: 2px;
+    cursor: pointer; border-radius: 4px; border: none;
+  }
+  .btn-danger { background: #dc3545; color: white; }
+  .btn-success { background: #198754; color: white; }
+  .email-edit-input {
+    width: 160px; padding: 4px 7px;
+    border: 1px solid #d1d5db; border-radius: 5px;
+    font-size: 12px; font-family: inherit;
+  }
+
+  /* ── Edit Form Modal ── */
+  .form-modal {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: flex; align-items: flex-start; justify-content: center;
+    z-index: 2000;
+    overflow-y: auto;
+    padding: 20px 10px;
+  }
+  .form-modal-content {
+    background: #fff;
+    border-radius: 16px;
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    max-width: 560px;
+    padding: 20px;
+    margin: auto;
   }
-  .btn-small { padding: 4px 8px; font-size: 11px; margin: 2px; cursor: pointer; }
-  .btn-danger { background: #dc3545; color: white; border: none; border-radius: 4px; }
-  .btn-warning { background: #ffc107; color: #333; border: none; border-radius: 4px; }
-  .close-btn { float: right; font-size: 24px; cursor: pointer; }
-  .info-box {
-    background: #e8f0fe;
-    padding: 10px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 13px;
-    display: none;
+  .form-modal-content h3 { font-size: 15px; margin-bottom: 4px; }
+  .form-modal-content .sub-h { font-size: 12px; color: #6b7280; margin-bottom: 16px; }
+  .form-section { margin-bottom: 14px; }
+  .form-section label { font-size: 12px; font-weight: 500; color: #374151; display: block; margin-bottom: 4px; }
+  .form-section input[type=text],
+  .form-section input[type=number],
+  .form-section select,
+  .form-section textarea {
+    width: 100%; padding: 8px 10px;
+    border: 1px solid #d1d5db; border-radius: 7px;
+    font-size: 13px; font-family: inherit;
+    outline: none; color: #111827;
   }
+  .form-section input:focus,
+  .form-section select:focus,
+  .form-section textarea:focus { border-color: #3b82f6; }
+  .form-section input[readonly] { background: #f3f4f6; color: #6b7280; cursor: not-allowed; }
+  .form-tabs { display: flex; gap: 6px; margin-bottom: 16px; }
+  .form-tab {
+    padding: 7px 14px; border-radius: 8px; border: 1px solid #d1d5db;
+    font-size: 13px; font-weight: 500; cursor: pointer; background: #f9fafb;
+    color: #374151; transition: all .12s;
+  }
+  .form-tab.active { background: #1a4a8a; color: #fff; border-color: #1a4a8a; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .individu-list { margin-bottom: 12px; }
+  .individu-item {
+    background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px;
+    padding: 10px 12px; margin-bottom: 8px; cursor: pointer;
+    transition: background .12s;
+  }
+  .individu-item:hover { background: #eff6ff; border-color: #93c5fd; }
+  .individu-item .ind-nama { font-size: 13px; font-weight: 600; }
+  .individu-item .ind-info { font-size: 11px; color: #6b7280; margin-top: 2px; }
+  .ind-flag { float: right; font-size: 10px; padding: 2px 7px; border-radius: 99px; font-weight: 600; }
+  .save-bar {
+    position: sticky; bottom: 0; background: #fff;
+    padding: 12px 0 0; border-top: 1px solid #e5e7eb;
+    margin-top: 16px; display: flex; gap: 8px;
+  }
+  .save-bar button { flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; font-weight: 500; font-family: inherit; cursor: pointer; border: none; }
+  .btn-save { background: #1a4a8a; color: #fff; }
+  .btn-save:hover { background: #163d73; }
+  .btn-cancel { background: #f3f4f6; color: #374151; border: 1px solid #e5e7eb !important; }
+
   @media (max-width: 400px) {
+    body { padding: 1rem .75rem 2rem; }
+    .btn-label { font-size: 13px; }
     .hasil-item { flex-direction: column; align-items: flex-start; }
   }
 </style>
@@ -190,11 +330,12 @@
 <body>
 <div class="wrap">
 
+  <!-- HEADER -->
   <div class="header">
-    <div class="logo-circle" id="submission-box" onclick="fetchSubmissionCount()">
+    <div class="logo-circle" title="Klik untuk refresh jumlah data" onclick="fetchSubmissionCount()">
       <div style="text-align:center;line-height:1.1;">
-        <div id="submission-count" style="font-size:26px;font-weight:700;color:#f5c518;">...</div>
-        <div style="font-size:9px;color:#a0c4f0;">DATA MASUK</div>
+        <div id="submission-count" style="font-size:26px;font-weight:700;color:#f5c518;letter-spacing:-1px;">...</div>
+        <div style="font-size:9px;color:#a0c4f0;font-weight:500;margin-top:2px;">DATA MASUK</div>
       </div>
     </div>
     <p class="org">Dinas PPKBPM Kota Banjarmasin</p>
@@ -205,7 +346,7 @@
 
   <p class="sec">Pendataan</p>
 
-  <a href="https://ee.kobotoolbox.org/x/ala3pXTY" target="_blank" class="btn primary-btn">
+  <a href="https://ee.kobotoolbox.org/x/ala3pXTY" target="_blank" class="btn primary-btn" style="margin-bottom:10px;">
     <div class="btn-icon" style="background:#dbeafe;color:#1d4ed8;"><i class="ti ti-clipboard-list"></i></div>
     <div class="btn-body">
       <p class="btn-label">1. Input data</p>
@@ -214,73 +355,76 @@
     <i class="ti ti-arrow-right btn-arr"></i>
   </a>
 
+  <!-- EDIT DATA -->
   <div class="card">
     <button class="btn" onclick="toggleEdit()">
       <div class="btn-icon" style="background:#dcfce7;color:#166534;"><i class="ti ti-edit"></i></div>
       <div class="btn-body">
         <p class="btn-label">2. Edit data</p>
-        <p class="btn-desc">Login dengan email petugas</p>
+        <p class="btn-desc">Masukkan kode & email petugas</p>
       </div>
       <i class="ti ti-chevron-down btn-arr chevron" id="edit-chev"></i>
     </button>
+
     <div id="edit-panel" style="display:none;" class="edit-panel">
-      <input type="email" id="edit-email" placeholder="Email petugas terdaftar"/>
-      <button class="submit-btn" onclick="doLogin()">Masuk ke edit data</button>
-      <p class="err-msg" id="err-msg"></p>
-      <p class="loading-msg" id="loading-msg">⏳ Memuat data...</p>
+
+      <!-- LANGKAH 1: Kode Petugas -->
+      <div id="step1">
+        <p class="hint">Masukkan kode petugas Anda.</p>
+        <input type="number" id="kode-input" placeholder="Contoh: 7" min="1" max="52"/>
+        <div class="nama-box" id="nama-box">
+          <div class="nama-label">Petugas ditemukan</div>
+          <div class="nama-val" id="nama-val">—</div>
+          <div class="kel-val" id="kel-val">—</div>
+        </div>
+        <button class="submit-btn" id="btn-cek-kode" onclick="cekKode()">Cek Kode</button>
+        <button class="submit-btn" id="btn-lanjut" style="display:none;background:#166534;" onclick="lanjutKeEmail()">Lanjut →</button>
+        <p class="err-msg" id="err-kode"></p>
+      </div>
+
+      <!-- LANGKAH 2: Email -->
+      <div id="step2" style="display:none;">
+        <div class="nama-box" style="display:block;" id="nama-box2">
+          <div class="nama-label">Login sebagai</div>
+          <div class="nama-val" id="nama-val2">—</div>
+          <div class="kel-val" id="kel-val2">—</div>
+        </div>
+        <p class="hint">Masukkan email terdaftar Anda.</p>
+        <input type="email" id="email-input" placeholder="email@gmail.com"/>
+        <button class="submit-btn" id="btn-login" onclick="doLogin()">Masuk</button>
+        <button class="reset-btn" onclick="backToStep1()" style="margin-bottom:8px;">← Ganti kode</button>
+        <p class="err-msg" id="err-email"></p>
+        <p class="loading-msg" id="loading-msg">⏳ Memuat data...</p>
+      </div>
+
+      <!-- HASIL LOGIN -->
       <div class="hasil-wrap" id="hasil-wrap">
         <p class="hasil-title" id="hasil-title"></p>
         <div id="hasil-list"></div>
-        <button class="reset-btn" onclick="resetLogin()">← Ganti email</button>
+        <button class="reset-btn" onclick="resetLogin()">← Ganti petugas</button>
       </div>
     </div>
   </div>
 
-  <!-- ADMIN SECTION -->
+  <!-- ADMIN -->
   <div class="admin-panel">
     <button class="btn" onclick="openAdminModal()">
       <div class="btn-icon" style="background:#fef3c7;color:#92400e;"><i class="ti ti-settings"></i></div>
       <div class="btn-body">
         <p class="btn-label">🔐 Admin: Kelola Email Petugas</p>
-        <p class="btn-desc">Daftarkan email berdasarkan kode petugas</p>
+        <p class="btn-desc">Tambah atau ubah email petugas</p>
       </div>
       <i class="ti ti-lock btn-arr"></i>
     </button>
   </div>
 
-  <!-- Admin Modal -->
-  <div id="adminModal" style="display:none;" class="admin-modal">
-    <div class="admin-modal-content">
-      <span class="close-btn" onclick="closeAdminModal()">&times;</span>
-      <h3 style="margin-bottom:15px;">📧 Daftarkan Email Petugas</h3>
-      
-      <div style="margin-bottom:20px; padding:10px; background:#f0fdf4; border-radius:8px;">
-        <h4 style="font-size:13px; margin-bottom:8px;">Tambah/Edit Petugas</h4>
-        <div class="admin-form">
-          <input type="hidden" id="adminEditRowId">
-          <input type="text" id="adminKode" placeholder="Kode Petugas (contoh: 51)" style="margin-bottom:8px;" onkeyup="cekKodeOtomatis()">
-          <div id="infoNama" class="info-box"></div>
-          <input type="text" id="adminNama" placeholder="Nama Lengkap" style="margin-bottom:8px;">
-          <input type="email" id="adminEmail" placeholder="Email petugas" style="margin-bottom:8px;">
-          <button class="submit-btn" onclick="adminSaveEmail()" style="margin-bottom:4px;">💾 Simpan</button>
-          <button class="reset-btn" onclick="adminClearForm()" style="background:#f3f4f6;">✖ Batal</button>
-        </div>
-      </div>
-      
-      <div id="adminStats" style="font-size:12px; margin-bottom:10px;">Memuat...</div>
-      <div id="adminTableContainer" style="max-height:300px; overflow-y:auto;">
-        <div style="text-align:center; padding:20px;">⏳ Memuat data...</div>
-      </div>
-    </div>
-  </div>
-
   <p class="sec">Kuesioner & Sampel</p>
 
   <div class="card">
-    <a href="#" class="btn">
+    <a href="https://drive.google.com/file/d/1R-SaeNbuh8juSfG06e76K8Svbdezq-ha/view?usp=drive_link" target="_blank" class="btn">
       <div class="btn-icon" style="background:#ede9fe;color:#5b21b6;"><i class="ti ti-file-description"></i></div>
       <div class="btn-body">
-        <p class="btn-label">3. Contoh kuesioner</p>
+        <p class="btn-label">3. Contoh/dummy kuesioner</p>
         <p class="btn-desc">Pratinjau formulir survei</p>
       </div>
       <i class="ti ti-external-link btn-arr"></i>
@@ -288,46 +432,156 @@
   </div>
 
   <div class="card">
-    <a href="#" class="btn">
+    <a href="https://docs.google.com/spreadsheets/d/1t4M9_qFsL7sapHTTgkhD20l3kWhtqEvvkx-vCSA9J9k/edit?usp=sharing" target="_blank" class="btn">
       <div class="btn-icon" style="background:#fef3c7;color:#92400e;"><i class="ti ti-map-pin"></i></div>
       <div class="btn-body">
-        <p class="btn-label">4. Daftar sampel RT</p>
-        <p class="btn-desc">Rukun tetangga sampel</p>
+        <p class="btn-label">4. Daftar sampel RT terpilih</p>
+        <p class="btn-desc">Rukun tetangga sampel per wilayah</p>
       </div>
       <i class="ti ti-external-link btn-arr"></i>
     </a>
   </div>
 
-  <p class="sec">Monitoring</p>
+  <div class="card">
+    <button class="btn" onclick="toggleSampel()">
+      <div class="btn-icon" style="background:#d1fae5;color:#065f46;"><i class="ti ti-users"></i></div>
+      <div class="btn-body">
+        <p class="btn-label">5. Daftar sampel rumah tangga</p>
+        <p class="btn-desc">Per kecamatan se-Kota Banjarmasin</p>
+      </div>
+      <i class="ti ti-chevron-down btn-arr chevron" id="sampel-chev"></i>
+    </button>
+    <div id="sampel-panel" style="display:none;" class="sub-panel">
+      <a href="https://drive.google.com/drive/folders/1vyLwuORSaEaxO-q5Bkro53dpyBOhdBGc" target="_blank" class="sub-btn">
+        <div class="sub-icon" style="background:#d1fae5;color:#065f46;"><i class="ti ti-building-community"></i></div>
+        <span class="sub-label">Banjarmasin Selatan</span>
+        <i class="ti ti-external-link" style="font-size:13px;color:#9ca3af;"></i>
+      </a>
+      <a href="https://drive.google.com/drive/folders/1vyLwuORSaEaxO-q5Bkro53dpyBOhdBGc" target="_blank" class="sub-btn">
+        <div class="sub-icon" style="background:#d1fae5;color:#065f46;"><i class="ti ti-building-community"></i></div>
+        <span class="sub-label">Banjarmasin Timur</span>
+        <i class="ti ti-external-link" style="font-size:13px;color:#9ca3af;"></i>
+      </a>
+      <a href="https://drive.google.com/drive/folders/1vyLwuORSaEaxO-q5Bkro53dpyBOhdBGc" target="_blank" class="sub-btn">
+        <div class="sub-icon" style="background:#d1fae5;color:#065f46;"><i class="ti ti-building-community"></i></div>
+        <span class="sub-label">Banjarmasin Barat</span>
+        <i class="ti ti-external-link" style="font-size:13px;color:#9ca3af;"></i>
+      </a>
+      <a href="https://drive.google.com/drive/folders/1vyLwuORSaEaxO-q5Bkro53dpyBOhdBGc" target="_blank" class="sub-btn">
+        <div class="sub-icon" style="background:#d1fae5;color:#065f46;"><i class="ti ti-building-community"></i></div>
+        <span class="sub-label">Banjarmasin Tengah</span>
+        <i class="ti ti-external-link" style="font-size:13px;color:#9ca3af;"></i>
+      </a>
+      <a href="https://drive.google.com/drive/folders/1vyLwuORSaEaxO-q5Bkro53dpyBOhdBGc" target="_blank" class="sub-btn">
+        <div class="sub-icon" style="background:#d1fae5;color:#065f46;"><i class="ti ti-building-community"></i></div>
+        <span class="sub-label">Banjarmasin Utara</span>
+        <i class="ti ti-external-link" style="font-size:13px;color:#9ca3af;"></i>
+      </a>
+    </div>
+  </div>
+
+  <p class="sec">Monitoring & Hasil</p>
 
   <div class="card">
-    <a href="#" class="btn">
+    <a href="https://docs.google.com/spreadsheets/d/18d6LoUiWSID8xqzJo7-VfNi0_zOrVpVpdbdWK4IuRRQ/edit?usp=sharing" target="_blank" class="btn">
       <div class="btn-icon" style="background:#dcfce7;color:#166534;"><i class="ti ti-table"></i></div>
       <div class="btn-body">
         <p class="btn-label">Monitoring lapangan</p>
-        <p class="btn-desc">Rekap data per petugas</p>
+        <p class="btn-desc">Rekap data masuk per petugas/wilayah</p>
       </div>
       <i class="ti ti-external-link btn-arr"></i>
     </a>
+  </div>
+
+  <div class="disabled-btn">
+    <div class="btn-icon" style="background:#fef3c7;color:#92400e;"><i class="ti ti-chart-bar"></i></div>
+    <div class="btn-body">
+      <p class="btn-label">Hasil sementara iBangga 2026</p>
+      <p class="btn-desc">Indeks total & tiga dimensi</p>
+    </div>
+    <span class="soon-badge">Segera</span>
   </div>
 
   <p class="footer">© 2026 Dinas PPKBPM Kota Banjarmasin · iBangga</p>
 </div>
 
-<script>
-var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxeSX6YWO1IJwCYu_MpxRB4hAwl-FDelc-cYXdoXQ0JOEXBqPZVkbpW1Vdbkbh8mYH4bQ/exec";
+<!-- ADMIN MODAL -->
+<div id="adminModal" style="display:none;" class="admin-modal">
+  <div class="admin-modal-content">
+    <span class="close-btn" onclick="closeAdminModal()">&times;</span>
+    <h3 style="margin-bottom:4px;">📧 Kelola Email Petugas</h3>
+    <p style="font-size:12px;color:#6b7280;margin-bottom:16px;">Klik kolom email untuk mengedit langsung.</p>
+    <div id="adminStats" style="font-size:12px;margin-bottom:10px;">Memuat...</div>
+    <div id="adminTableContainer">
+      <div style="text-align:center;padding:20px;">⏳ Memuat data...</div>
+    </div>
+    <button class="reset-btn" onclick="closeAdminModal()" style="margin-top:12px;">Tutup</button>
+  </div>
+</div>
 
+<!-- EDIT FORM MODAL -->
+<div id="editModal" style="display:none;" class="form-modal">
+  <div class="form-modal-content">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <h3 id="editModalTitle">Edit Data</h3>
+      <span class="close-btn" onclick="closeEditModal()">&times;</span>
+    </div>
+    <p class="sub-h" id="editModalSub"></p>
+
+    <div class="form-tabs">
+      <button class="form-tab active" onclick="switchTab('keluarga')">🏠 Keluarga</button>
+      <button class="form-tab" onclick="switchTab('individu')">👥 Anggota</button>
+    </div>
+
+    <div id="tab-keluarga" class="tab-content active">
+      <div id="form-keluarga-fields">
+        <p style="font-size:12px;color:#6b7280;">⏳ Memuat...</p>
+      </div>
+    </div>
+
+    <div id="tab-individu" class="tab-content">
+      <div id="individu-list-view">
+        <p style="font-size:12px;color:#6b7280;margin-bottom:8px;">Pilih anggota keluarga untuk diedit:</p>
+        <div id="individu-list"></div>
+      </div>
+      <div id="individu-form-view" style="display:none;">
+        <button class="reset-btn" onclick="backToIndividuList()" style="margin-bottom:12px;">← Kembali ke daftar</button>
+        <div id="form-individu-fields"></div>
+      </div>
+    </div>
+
+    <div class="save-bar">
+      <button class="btn-cancel btn-save" onclick="closeEditModal()">Tutup</button>
+      <button class="btn-save" id="btn-save-main" onclick="submitEdit()">💾 Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzJQBOYWnwVWniI4AY2xmeKUxmd6tMcLTYJarQvUGT0pnqitUCGjH4s6ozp_LRF0_5C/exec";
+
+// State
+var currentKode = "";
+var currentNama = "";
+var currentKelurahan = "";
+var currentTab = "keluarga";
+var currentUUID = "";
+var currentParentId = "";
+var currentRowIndex = 0;
+var currentIndividuRowIndex = 0;
+
+// ── Submission count ──
 function fetchSubmissionCount() {
   var el = document.getElementById("submission-count");
   el.textContent = "...";
   fetch(WEB_APP_URL + "?action=getSubmissionCount")
-    .then(r => r.json())
-    .then(res => { el.textContent = res.total !== undefined ? res.total : "?"; })
-    .catch(() => { el.textContent = "!"; });
+    .then(function(r){ return r.json(); })
+    .then(function(res){ el.textContent = (res.total !== undefined) ? res.total : "?"; })
+    .catch(function(){ el.textContent = "!"; });
 }
-
 window.addEventListener("load", fetchSubmissionCount);
 
+// ── Toggle panels ──
 function toggleEdit(){
   var p = document.getElementById('edit-panel');
   var c = document.getElementById('edit-chev');
@@ -335,224 +589,420 @@ function toggleEdit(){
   p.style.display = open ? 'none' : 'block';
   c.style.transform = open ? '' : 'rotate(180deg)';
 }
+function toggleSampel(){
+  var p = document.getElementById('sampel-panel');
+  var c = document.getElementById('sampel-chev');
+  var open = p.style.display !== 'none';
+  p.style.display = open ? 'none' : 'block';
+  c.style.transform = open ? '' : 'rotate(180deg)';
+}
 
-function doLogin(){
-  var email = document.getElementById('edit-email').value.trim().toLowerCase();
-  var msg = document.getElementById('err-msg');
+// ── LOGIN LANGKAH 1: Cek Kode ──
+function cekKode() {
+  var kode = document.getElementById('kode-input').value.trim();
+  var errEl = document.getElementById('err-kode');
+  var namaBox = document.getElementById('nama-box');
+  errEl.style.display = 'none';
+  namaBox.style.display = 'none';
+  document.getElementById('btn-lanjut').style.display = 'none';
+
+  if (!kode) { errEl.textContent = 'Masukkan kode petugas.'; errEl.style.display = 'block'; return; }
+
+  document.getElementById('btn-cek-kode').disabled = true;
+  fetch(WEB_APP_URL + "?action=checkKode&kode=" + encodeURIComponent(kode))
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      document.getElementById('btn-cek-kode').disabled = false;
+      if (res.found) {
+        currentKode = kode;
+        currentNama = res.nama;
+        currentKelurahan = res.kelurahan;
+        document.getElementById('nama-val').textContent = res.nama;
+        document.getElementById('kel-val').textContent = res.kelurahan;
+        namaBox.style.display = 'block';
+        document.getElementById('btn-lanjut').style.display = 'block';
+        document.getElementById('btn-cek-kode').style.display = 'none';
+      } else {
+        errEl.textContent = '⚠️ ' + res.error;
+        errEl.style.display = 'block';
+      }
+    })
+    .catch(function(){
+      document.getElementById('btn-cek-kode').disabled = false;
+      errEl.textContent = '❌ Gagal terhubung. Coba lagi.';
+      errEl.style.display = 'block';
+    });
+}
+
+function lanjutKeEmail() {
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  document.getElementById('nama-val2').textContent = currentNama;
+  document.getElementById('kel-val2').textContent = currentKelurahan;
+  document.getElementById('email-input').focus();
+}
+
+function backToStep1() {
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('err-email').style.display = 'none';
+  document.getElementById('loading-msg').style.display = 'none';
+}
+
+// ── LOGIN LANGKAH 2: Verifikasi Email ──
+function doLogin() {
+  var email = document.getElementById('email-input').value.trim().toLowerCase();
+  var errEl = document.getElementById('err-email');
   var loading = document.getElementById('loading-msg');
-  var hasilWrap = document.getElementById('hasil-wrap');
+  errEl.style.display = 'none';
 
-  msg.style.display = 'none';
-  hasilWrap.style.display = 'none';
-
-  if(!email){ msg.textContent = 'Masukkan email'; msg.style.display = 'block'; return; }
-  if(email.indexOf('@') === -1){ msg.textContent = 'Email tidak valid'; msg.style.display = 'block'; return; }
+  if (!email || email.indexOf('@') === -1) {
+    errEl.textContent = 'Format email tidak valid.';
+    errEl.style.display = 'block'; return;
+  }
 
   loading.style.display = 'block';
-  document.querySelector('.submit-btn').disabled = true;
+  document.getElementById('btn-login').disabled = true;
 
-  fetch(WEB_APP_URL + "?action=getEditLinks&email=" + encodeURIComponent(email))
-    .then(r => r.json())
-    .then(res => {
+  fetch(WEB_APP_URL + "?action=loginPetugas&kode=" + encodeURIComponent(currentKode) + "&email=" + encodeURIComponent(email))
+    .then(function(r){ return r.json(); })
+    .then(function(res){
       loading.style.display = 'none';
-      document.querySelector('.submit-btn').disabled = false;
+      document.getElementById('btn-login').disabled = false;
+      if (res.error) {
+        errEl.textContent = '⚠️ ' + res.error;
+        errEl.style.display = 'block'; return;
+      }
+      // Login berhasil, ambil data
+      ambilDataPetugas(res.kode, res.nama);
+    })
+    .catch(function(){
+      loading.style.display = 'none';
+      document.getElementById('btn-login').disabled = false;
+      document.getElementById('err-email').textContent = '❌ Gagal terhubung. Coba lagi.';
+      document.getElementById('err-email').style.display = 'block';
+    });
+}
 
-      if(res.error){ msg.textContent = '⚠️ ' + res.error; msg.style.display = 'block'; return; }
+function ambilDataPetugas(kode, nama) {
+  var loading = document.getElementById('loading-msg');
+  loading.style.display = 'block';
+  fetch(WEB_APP_URL + "?action=getDataPetugas&kode=" + encodeURIComponent(kode))
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      loading.style.display = 'none';
+      if (res.error) {
+        document.getElementById('err-email').textContent = '⚠️ ' + res.error;
+        document.getElementById('err-email').style.display = 'block'; return;
+      }
 
-      document.getElementById('hasil-title').textContent = '✅ Halo ' + res.nama_petugas + '! ' + res.jumlah + ' data ditemukan';
+      document.getElementById('step2').style.display = 'none';
+      document.getElementById('hasil-title').textContent = '✅ Halo ' + nama + '! ' + res.jumlah + ' data ditemukan';
 
       var html = '';
-      res.data.forEach(item => {
-        var gagal = !item.edit_link;
+      res.data.forEach(function(item){
+        var flagLabel = item.flag_edit == 1 ? '<span class="flag-badge flag-1">✓ Sudah diedit</span>' : '<span class="flag-badge flag-0">Belum diedit</span>';
         html += '<div class="hasil-item">';
         html += '<div style="flex:1;">';
-        html += '<div class="hasil-id">Nomor Urut RT <span>' + item.no_rt + '</span> | Resp. <span>' + item.no_responden + '</span></div>';
-        html += '<div class="hasil-nama">KK: <span>' + (item.nama_kepala_kk || '-') + '</span></div>';
-        if(gagal) html += '<div style="font-size:11px;color:#dc2626;">⚠️ Link tidak tersedia</div>';
+        html += '<div class="hasil-id">RT <span>' + item.no_rt + '</span> &nbsp;|&nbsp; Resp. <span>' + item.no_responden + '</span></div>';
+        html += '<div class="hasil-nama">KK: <span>' + (item.nama_kk || '-') + '</span></div>';
+        html += flagLabel;
         html += '</div>';
-        if(!gagal) html += '<a class="hasil-link" href="' + item.edit_link + '" target="_blank"><i class="ti ti-edit"></i> Edit</a>';
-        else html += '<span style="font-size:11px;color:#9ca3af;">Tidak bisa diedit</span>';
+        html += '<button class="hasil-link" onclick="bukaEditModal(\'' + escHtml(item._uuid) + '\', ' + item._id + ', \'' + escHtml(item.nama_kk) + '\', ' + item.no_rt + ', ' + item.no_responden + ')">';
+        html += '<i class="ti ti-edit"></i> Edit</button>';
         html += '</div>';
       });
 
       document.getElementById('hasil-list').innerHTML = html;
-      hasilWrap.style.display = 'block';
-      document.getElementById('edit-email').style.display = 'none';
-      document.querySelector('.submit-btn').style.display = 'none';
+      document.getElementById('hasil-wrap').style.display = 'block';
       fetchSubmissionCount();
     })
-    .catch(() => {
+    .catch(function(){
       loading.style.display = 'none';
-      document.querySelector('.submit-btn').disabled = false;
-      msg.textContent = '❌ Gagal terhubung ke server';
-      msg.style.display = 'block';
+      document.getElementById('err-email').textContent = '❌ Gagal memuat data.';
+      document.getElementById('err-email').style.display = 'block';
     });
 }
 
-function resetLogin(){
-  document.getElementById('edit-email').style.display = 'block';
-  document.getElementById('edit-email').value = '';
-  document.querySelector('.submit-btn').style.display = 'block';
-  document.querySelector('.submit-btn').disabled = false;
+function resetLogin() {
+  currentKode = ""; currentNama = ""; currentKelurahan = "";
   document.getElementById('hasil-wrap').style.display = 'none';
-  document.getElementById('err-msg').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('kode-input').value = '';
+  document.getElementById('email-input').value = '';
+  document.getElementById('nama-box').style.display = 'none';
+  document.getElementById('btn-lanjut').style.display = 'none';
+  document.getElementById('btn-cek-kode').style.display = 'block';
+  document.getElementById('btn-cek-kode').disabled = false;
+  document.getElementById('err-kode').style.display = 'none';
+  document.getElementById('err-email').style.display = 'none';
 }
 
-// ADMIN FUNCTIONS
+// ── EDIT MODAL ──
+function bukaEditModal(uuid, parentId, namaKK, rt, resp) {
+  currentUUID = uuid;
+  currentParentId = parentId;
+  document.getElementById('editModalTitle').textContent = 'Edit Data RT ' + rt + ' Resp. ' + resp;
+  document.getElementById('editModalSub').textContent = 'KK: ' + namaKK;
+  document.getElementById('editModal').style.display = 'flex';
+  switchTab('keluarga');
+  muatFormKeluarga(uuid);
+}
+
+function closeEditModal() {
+  document.getElementById('editModal').style.display = 'none';
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.form-tab').forEach(function(b){ b.classList.remove('active'); });
+  document.querySelectorAll('.tab-content').forEach(function(c){ c.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('btn-save-main').style.display = tab === 'individu' ? 'none' : 'block';
+
+  if (tab === 'individu') muatIndividu(currentParentId);
+}
+
+// Field yang dikunci (tidak bisa diedit)
+var LOCKED_FIELDS = ['_uuid','_id','_submission_time','_submitted_by','flag_edit'];
+
+function muatFormKeluarga(uuid) {
+  var container = document.getElementById('form-keluarga-fields');
+  container.innerHTML = '<p style="font-size:12px;color:#6b7280;">⏳ Memuat...</p>';
+
+  fetch(WEB_APP_URL + "?action=getDataPetugas&kode=" + encodeURIComponent(currentKode))
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      // Cari baris yang sesuai uuid — kita butuh semua kolom, buat request khusus
+      // Untuk sederhananya, tampilkan form dengan data dari hasil login yang sudah ada
+      // Kita akan fetch detail via action tersendiri — gunakan saveEditKeluarga dengan data awal
+      // Untuk MVP: tampilkan semua kolom yang bisa diedit
+      renderFormKeluarga({});
+    });
+}
+
+// Kolom keluarga yang ditampilkan di form edit (label → nama kolom)
+var KOLOM_KELUARGA = [
+  {label:"Sampel Utama/Pengganti", name:"Sampel_utama_pengganti"},
+  {label:"Tanggal Pengisian", name:"Tanggal_Pengisian"},
+  {label:"Nama Petugas", name:"Nama_Petugas"},
+  {label:"Kecamatan", name:"Kecamatan"},
+  {label:"No RT Terpilih", name:"No_RT_Terpilih"},
+  {label:"RT", name:"RT"},
+  {label:"RW", name:"RW"},
+  {label:"Responden Terpilih ke", name:"Responden_Terpilih_ke"},
+  {label:"Nama Kepala Keluarga", name:"IR01_Nama_Kepala_Keluarga"},
+  {label:"No. KK", name:"IR02_Nomor_Kartu_Keluarga"},
+  {label:"Alamat Lengkap", name:"IR03_Alamat_Lengkap"},
+  {label:"No. HP/WA", name:"IR04_No_HP_WA"},
+  {label:"Status Rumah", name:"IR08_Status_Rumah"},
+  {label:"Jml Anggota Keluarga", name:"Berapa_Jumlah_Anggot_an_Makan_Dirumah_Ini"},
+  {label:"Atap Terluas", name:"Atap_terluas_rumah_terluar"},
+  {label:"Kondisi Atap", name:"Kondisi_atas_terluas"},
+  {label:"Dinding Terluas", name:"Dinding_terluas_rumah_yang_ditempati"},
+  {label:"Kondisi Dinding", name:"Kondisi_dinding_terluas"},
+  {label:"Lantai Terluas", name:"Lantai_terluas_rumah_yang_ditempati"},
+  {label:"Kondisi Lantai", name:"Kondisi_lantai_terluas"},
+  {label:"Luas Lantai (m²)", name:"luas_lantai_rumah_ya_empati_sebatas_atap"},
+  {label:"Sumber Air Minum", name:"Sumber_air_minum_utama"},
+  {label:"Fasilitas BAB", name:"Fasilitas_buang_air_besar"},
+  {label:"Rekreasi Bersama", name:"DKK12_Selama_enam_b_ersama_di_luar_rumah"},
+];
+
+function renderFormKeluarga(data) {
+  var html = '';
+  KOLOM_KELUARGA.forEach(function(k){
+    var val = data[k.name] !== undefined ? data[k.name] : '';
+    html += '<div class="form-section">';
+    html += '<label>' + escHtml(k.label) + '</label>';
+    html += '<input type="text" name="' + k.name + '" value="' + escHtml(String(val)) + '"/>';
+    html += '</div>';
+  });
+  // Readonly fields
+  html += '<div class="form-section"><label>UUID (tidak bisa diedit)</label><input type="text" readonly value="' + escHtml(currentUUID) + '"/></div>';
+  document.getElementById('form-keluarga-fields').innerHTML = html;
+}
+
+function muatIndividu(parentId) {
+  document.getElementById('individu-list-view').style.display = 'block';
+  document.getElementById('individu-form-view').style.display = 'none';
+  var listEl = document.getElementById('individu-list');
+  listEl.innerHTML = '<p style="font-size:12px;color:#6b7280;">⏳ Memuat anggota...</p>';
+
+  fetch(WEB_APP_URL + "?action=getIndividu&parent_id=" + encodeURIComponent(parentId))
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if (res.error || !res.data || res.data.length === 0) {
+        listEl.innerHTML = '<p style="font-size:12px;color:#6b7280;">Tidak ada data anggota. Pastikan sync sudah dijalankan.</p>';
+        return;
+      }
+      var html = '';
+      res.data.forEach(function(ind){
+        var namaCol = 'group_rr1kr26/Nama_Anggota_Keluarga';
+        var noCol   = 'group_rr1kr26/No_Urut';
+        var flagCol = 'flag_edit';
+        var flagBadge = ind[flagCol] == 1
+          ? '<span class="ind-flag flag-1">✓ Edit</span>'
+          : '<span class="ind-flag flag-0">Belum</span>';
+        html += '<div class="individu-item" onclick="bukaFormIndividu(' + JSON.stringify(ind).replace(/'/g,"&#39;") + ')">';
+        html += flagBadge;
+        html += '<div class="ind-nama">' + escHtml(ind[namaCol] || 'Anggota ' + ind[noCol]) + '</div>';
+        html += '<div class="ind-info">No. Urut: ' + (ind[noCol]||'-') + '</div>';
+        html += '</div>';
+      });
+      listEl.innerHTML = html;
+    })
+    .catch(function(){
+      listEl.innerHTML = '<p style="color:red;font-size:12px;">❌ Gagal memuat.</p>';
+    });
+}
+
+// Kolom individu yang ditampilkan
+var KOLOM_INDIVIDU = [
+  {label:"Nama Anggota Keluarga", name:"group_rr1kr26/Nama_Anggota_Keluarga"},
+  {label:"Hubungan dg KK", name:"group_rr1kr26/Hubungan_Dengan_Kepala_Keluarga"},
+  {label:"Jenis Kelamin", name:"group_rr1kr26/Jenis_Kelamin"},
+  {label:"Umur", name:"group_rr1kr26/umur"},
+  {label:"Status Perkawinan", name:"group_rr1kr26/statusperkawinan"},
+  {label:"Punya Buku Nikah", name:"group_rr1kr26/Apakah_Memiliki_buku_nikah_yan"},
+  {label:"Akta Lahir (0-17th)", name:"group_rr1kr26/Apakah_memiliki_akta_lahir_us"},
+  {label:"Kartu Jaminan Kesehatan", name:"group_rr1kr26/Apakah_memiliki_kartu_jaminan_"},
+  {label:"Ijazah", name:"group_rr1kr26/Ijazah_yang_dimiliki_5_tahun_keatas"},
+  {label:"Usia Kawin Pertama", name:"group_rr1kr26/IR09_Usia_Perkawina_sudah_pernah_menikah"},
+  {label:"Pernah Melahirkan", name:"group_rr1kr26/Apakah_pernah_melahirkan"},
+  {label:"Jml Anak Lahir Hidup", name:"group_rr1kr26/IR12_Jumlah_Anak_La_ikah_15_Tahun_Keatas"},
+  {label:"Jml Anak Masih Hidup", name:"group_rr1kr26/IR14_Jumlah_Anak_Ma_ikah_15_Tahun_Keatas"},
+  {label:"Menggunakan Kontrasepsi", name:"group_rr1kr26/Apakah_menggunakan_kontrasepsi"},
+  {label:"Alat KB", name:"group_rr1kr26/Jika_ya_maka_sebutkan_alat_KB_nya"},
+  {label:"Bekerja", name:"group_rr1kr26/Apakah_bekerja_berusaha_minima"},
+  {label:"Pekerjaan Utama", name:"group_rr1kr26/Pekerjaan_Usaha"},
+  {label:"Stunting (≤24 bln)", name:"group_rr1kr26/Apakah_nama_mengal_nak_24_bulan_kebawah"},
+  {label:"Disabilitas", name:"group_rr1kr26/Apakah_mengalami_disabilitas"},
+  {label:"Sakit Meninggalkan Aktivitas", name:"group_rr1kr26/Dalam_satu_bulan_ter_ninggalkan_aktifitas"},
+];
+
+function bukaFormIndividu(ind) {
+  currentIndividuRowIndex = ind._row_index;
+  document.getElementById('individu-list-view').style.display = 'none';
+  document.getElementById('individu-form-view').style.display = 'block';
+  document.getElementById('btn-save-main').style.display = 'block';
+  currentTab = 'individu_form';
+
+  var namaCol = 'group_rr1kr26/Nama_Anggota_Keluarga';
+  var html = '<h4 style="font-size:13px;margin-bottom:12px;">✏️ ' + escHtml(ind[namaCol] || 'Anggota') + '</h4>';
+  KOLOM_INDIVIDU.forEach(function(k){
+    var val = ind[k.name] !== undefined ? ind[k.name] : '';
+    html += '<div class="form-section">';
+    html += '<label>' + escHtml(k.label) + '</label>';
+    html += '<input type="text" name="ind_' + k.name + '" value="' + escHtml(String(val)) + '"/>';
+    html += '</div>';
+  });
+  document.getElementById('form-individu-fields').innerHTML = html;
+}
+
+function backToIndividuList() {
+  document.getElementById('individu-list-view').style.display = 'block';
+  document.getElementById('individu-form-view').style.display = 'none';
+  document.getElementById('btn-save-main').style.display = 'none';
+  currentTab = 'individu';
+}
+
+// ── SIMPAN EDIT ──
+function submitEdit() {
+  var btn = document.getElementById('btn-save-main');
+  btn.disabled = true;
+  btn.textContent = '⏳ Menyimpan...';
+
+  if (currentTab === 'keluarga') {
+    var params = { action: 'saveEditKeluarga', uuid: currentUUID };
+    document.querySelectorAll('#form-keluarga-fields input[name]').forEach(function(el){
+      params[el.name] = el.value;
+    });
+    var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); }).join('&');
+    fetch(WEB_APP_URL + '?' + qs)
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        btn.disabled = false; btn.textContent = '💾 Simpan';
+        if (res.success) { alert('✅ ' + res.message); closeEditModal(); ambilDataPetugas(currentKode, currentNama); }
+        else alert('❌ ' + res.error);
+      })
+      .catch(function(){ btn.disabled = false; btn.textContent = '💾 Simpan'; alert('❌ Gagal terhubung.'); });
+
+  } else if (currentTab === 'individu_form') {
+    var params = { action: 'saveEditIndividu', row_index: currentIndividuRowIndex };
+    document.querySelectorAll('#form-individu-fields input[name]').forEach(function(el){
+      // Hapus prefix 'ind_' dari nama
+      params[el.name.replace(/^ind_/, '')] = el.value;
+    });
+    var qs = Object.keys(params).map(function(k){ return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]); }).join('&');
+    fetch(WEB_APP_URL + '?' + qs)
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        btn.disabled = false; btn.textContent = '💾 Simpan';
+        if (res.success) { alert('✅ ' + res.message); backToIndividuList(); muatIndividu(currentParentId); }
+        else alert('❌ ' + res.error);
+      })
+      .catch(function(){ btn.disabled = false; btn.textContent = '💾 Simpan'; alert('❌ Gagal terhubung.'); });
+  }
+}
+
+// ── ADMIN ──
 function openAdminModal() {
   document.getElementById('adminModal').style.display = 'flex';
   adminLoadData();
 }
-
 function closeAdminModal() {
   document.getElementById('adminModal').style.display = 'none';
-  adminClearForm();
 }
-
-function cekKodeOtomatis() {
-  var kode = document.getElementById('adminKode').value.trim();
-  var infoBox = document.getElementById('infoNama');
-  var namaField = document.getElementById('adminNama');
-  
-  if(kode.length === 0) {
-    infoBox.style.display = 'none';
-    return;
-  }
-  
-  fetch(WEB_APP_URL + "?action=cekKode&kode=" + encodeURIComponent(kode))
-    .then(r => r.json())
-    .then(res => {
-      if(res.status === "sudah_terdaftar") {
-        infoBox.style.display = 'block';
-        infoBox.style.background = '#d1fae5';
-        infoBox.style.color = '#065f46';
-        infoBox.innerHTML = '✅ Petugas sudah terdaftar: <strong>' + escapeHtml(res.nama) + '</strong><br>Email: ' + escapeHtml(res.email);
-        namaField.value = res.nama;
-      } else if(res.status === "belum_terdaftar") {
-        infoBox.style.display = 'block';
-        infoBox.style.background = '#fef3c7';
-        infoBox.style.color = '#92400e';
-        infoBox.innerHTML = '⚠️ Kode belum terdaftar. Silakan isi nama lengkap petugas.';
-        namaField.value = '';
-      } else if(res.error) {
-        infoBox.style.display = 'block';
-        infoBox.style.background = '#fef2f2';
-        infoBox.style.color = '#dc2626';
-        infoBox.innerHTML = '❌ ' + res.error;
-      }
-    })
-    .catch(err => {
-      infoBox.style.display = 'block';
-      infoBox.style.background = '#fef2f2';
-      infoBox.style.color = '#dc2626';
-      infoBox.innerHTML = '❌ Gagal cek kode';
-    });
-}
-
 function adminLoadData() {
   var container = document.getElementById('adminTableContainer');
-  container.innerHTML = '<div style="text-align:center; padding:20px;">⏳ Memuat data...</div>';
-  
+  container.innerHTML = '<div style="text-align:center;padding:20px;">⏳ Memuat...</div>';
   fetch(WEB_APP_URL + "?action=getAllEmails")
-    .then(r => r.json())
-    .then(data => {
-      if(data.error) throw new Error(data.error);
-      
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.error) { container.innerHTML = '<p style="color:red;">❌ ' + data.error + '</p>'; return; }
       document.getElementById('adminStats').innerHTML = '📊 Total: ' + data.length + ' petugas';
-      
-      if(data.length === 0) {
-        container.innerHTML = '<p style="text-align:center; padding:40px;">📭 Belum ada data.</p>';
-        return;
-      }
-      
-      var html = '<table class="admin-table"><thead><tr><th>No</th><th>Kode</th><th>Nama</th><th>Email</th><th>Aksi</th></tr></thead><tbody>';
-      for(var i = 0; i < data.length; i++){
+      var html = '<table class="admin-table"><thead><tr><th>No</th><th>Nama</th><th>Kode</th><th>Kelurahan</th><th>Email</th><th>Aksi</th></tr></thead><tbody>';
+      data.forEach(function(p, i){
         html += '<tr>';
         html += '<td>' + (i+1) + '</td>';
-        html += '<td>' + escapeHtml(data[i].kode) + '</td>';
-        html += '<td>' + escapeHtml(data[i].nama) + '</td>';
-        html += '<td>' + escapeHtml(data[i].email) + '</td>';
-        html += '<td><button class="btn-small btn-warning" onclick="adminEditData(' + data[i].rowId + ', \'' + escapeHtml(data[i].nama) + '\', \'' + escapeHtml(data[i].kode) + '\', \'' + escapeHtml(data[i].email) + '\')">✏ Edit</button>';
-        html += '<button class="btn-small btn-danger" onclick="adminDeleteData(' + data[i].rowId + ')">🗑 Hapus</button></td>';
+        html += '<td>' + escHtml(p.nama) + '</td>';
+        html += '<td>' + escHtml(String(p.kode)) + '</td>';
+        html += '<td>' + escHtml(p.kelurahan) + '</td>';
+        html += '<td><input class="email-edit-input" type="email" value="' + escHtml(p.email||'') + '" id="email-row-' + p.rowId + '" placeholder="(belum ada)"/></td>';
+        html += '<td><button class="btn-small btn-success" onclick="adminSaveEmail(' + p.rowId + ')">💾</button></td>';
         html += '</tr>';
-      }
+      });
       html += '</tbody></table>';
       container.innerHTML = html;
     })
-    .catch(err => {
-      container.innerHTML = '<p style="color:red;">❌ ' + err + '</p>';
-    });
+    .catch(function(){ container.innerHTML = '<p style="color:red;">❌ Gagal memuat.</p>'; });
+}
+function adminSaveEmail(rowId) {
+  var email = document.getElementById('email-row-' + rowId).value.trim();
+  fetch(WEB_APP_URL + "?action=saveEmail&rowId=" + rowId + "&email=" + encodeURIComponent(email))
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      if (res.success) alert('✅ Email disimpan!');
+      else alert('❌ ' + res.error);
+    })
+    .catch(function(){ alert('❌ Gagal.'); });
 }
 
-function escapeHtml(str) {
-  if(!str) return '';
-  return str.replace(/[&<>]/g, function(m) {
-    if(m === '&') return '&amp;';
-    if(m === '<') return '&lt;';
-    if(m === '>') return '&gt;';
-    return m;
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, function(m){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m];
   });
 }
 
-function adminSaveEmail() {
-  var kode = document.getElementById('adminKode').value.trim();
-  var nama = document.getElementById('adminNama').value.trim();
-  var email = document.getElementById('adminEmail').value.trim();
-  var rowId = document.getElementById('adminEditRowId').value;
-  
-  if(!kode || !nama || !email){
-    alert('Kode, Nama, dan Email harus diisi!');
-    return;
-  }
-  
-  var url = WEB_APP_URL + "?action=saveEmail&nama=" + encodeURIComponent(nama) + "&kode=" + encodeURIComponent(kode) + "&email=" + encodeURIComponent(email);
-  if(rowId) url += "&rowId=" + rowId;
-  
-  fetch(url)
-    .then(r => r.json())
-    .then(result => {
-      if(result.error) alert('❌ ' + result.error);
-      else { alert('✅ ' + result.message); adminClearForm(); adminLoadData(); }
-    })
-    .catch(err => alert('❌ Gagal: ' + err));
-}
-
-function adminEditData(rowId, nama, kode, email) {
-  document.getElementById('adminEditRowId').value = rowId;
-  document.getElementById('adminKode').value = kode;
-  document.getElementById('adminNama').value = nama;
-  document.getElementById('adminEmail').value = email;
-  
-  var infoBox = document.getElementById('infoNama');
-  infoBox.style.display = 'block';
-  infoBox.style.background = '#d1fae5';
-  infoBox.style.color = '#065f46';
-  infoBox.innerHTML = '✏️ Edit data petugas: <strong>' + escapeHtml(nama) + '</strong>';
-}
-
-function adminDeleteData(rowId) {
-  if(confirm('Yakin ingin menghapus data ini?')){
-    fetch(WEB_APP_URL + "?action=deleteEmail&rowId=" + rowId)
-      .then(r => r.json())
-      .then(result => {
-        if(result.error) alert('❌ ' + result.error);
-        else { alert('✅ ' + result.message); adminLoadData(); }
-      })
-      .catch(err => alert('❌ Gagal: ' + err));
-  }
-}
-
-function adminClearForm() {
-  document.getElementById('adminEditRowId').value = '';
-  document.getElementById('adminKode').value = '';
-  document.getElementById('adminNama').value = '';
-  document.getElementById('adminEmail').value = '';
-  document.getElementById('infoNama').style.display = 'none';
-  document.getElementById('infoNama').innerHTML = '';
-}
-
-document.getElementById('edit-email').addEventListener('keydown', function(e){
-  if(e.key === 'Enter') doLogin();
+document.getElementById('kode-input').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') cekKode();
+});
+document.getElementById('email-input').addEventListener('keydown', function(e){
+  if (e.key === 'Enter') doLogin();
 });
 </script>
 </body>
