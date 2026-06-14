@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KoboToolbox Web Form - Survey Pembangunan Keluarga</title>
+<title>KoboToolbox Multi-Page Form</title>
 <style>
 :root {
   --kobomedium: #2c3e50;
@@ -28,7 +28,6 @@ body {
   justify-content: center;
 }
 
-/* Kobo Form Container Layout */
 .enketo-form-container {
   width: 100%;
   max-width: 800px;
@@ -37,9 +36,10 @@ body {
   border-top: 6px solid var(--koboorange);
   box-shadow: 0 4px 10px rgba(0,0,0,0.05);
   border-radius: 2px;
+  display: flex;
+  flex-direction: column;
 }
 
-/* Header Kobo Style */
 .form-header {
   padding: 25px 35px;
   border-bottom: 1px solid #e6e6e6;
@@ -50,35 +50,32 @@ body {
   color: var(--kobomedium);
 }
 
-/* Form Content Area */
 .form-body {
-  padding: 20px 35px 35px 35px;
+  padding: 25px 35px;
+  min-height: 350px;
 }
 
-/* Kobo Section/Group Style */
-.kobo-group {
-  border: 1px solid #e1e1e1;
-  background: #fafafa;
-  padding: 20px;
-  margin-bottom: 25px;
-  border-radius: 3px;
+/* Kobo Multi-Page Layer */
+.kobo-page {
+  display: none; /* Sembunyikan semua halaman secara default */
 }
+.kobo-page.active-page {
+  display: block; /* Hanya tampilkan halaman aktif */
+}
+
 .group-title {
-  font-size: 15px;
+  font-size: 16px;
   font-weight: bold;
   text-transform: uppercase;
   color: #7f8c8d;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   letter-spacing: 0.5px;
-  border-bottom: 1px solid #e1e1e1;
-  padding-bottom: 5px;
+  border-bottom: 2px solid var(--kobolight);
+  padding-bottom: 8px;
 }
 
-/* Kobo Question Block */
 .question {
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 1px transparent;
+  margin-bottom: 25px;
 }
 .question.hidden {
   display: none !important;
@@ -95,98 +92,74 @@ body {
   color: var(--required-color);
   margin-left: 3px;
 }
-.question-hint {
-  display: block;
-  font-size: 12px;
-  color: #7f8c8d;
-  font-style: italic;
-  margin-bottom: 8px;
-}
 
-/* Input Controls Kobo Style */
 .form-control {
   width: 100%;
-  padding: 8px 12px;
+  padding: 10px 12px;
   font-size: 14px;
   border: 1px solid var(--border-color);
   border-radius: 2px;
   background-color: #fff;
-  color: #333;
 }
 .form-control:focus {
   outline: none;
   border-color: var(--koboblue);
-  box-shadow: 0 0 4px rgba(52, 152, 219, 0.3);
 }
-textarea.form-control {
-  resize: vertical;
-  min-height: 70px;
-}
+textarea.form-control { resize: vertical; min-height: 80px; }
 
-/* Kobo Select One / Radio Button List vertical layout */
 .option-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   margin-top: 5px;
 }
 .option-item {
   display: flex;
   align-items: flex-start;
-  gap: 8px;
+  gap: 10px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: normal;
-  color: #34495e;
 }
 .option-item input[type="radio"] {
   margin-top: 3px;
   width: 16px;
   height: 16px;
-  cursor: pointer;
 }
 
-/* Grid row for RT/RW */
-.grid-row {
-  display: flex;
-  gap: 15px;
-}
-.grid-col {
-  flex: 1;
-}
+.grid-row { display: flex; gap: 15px; }
+.grid-col { flex: 1; }
 
-/* Footer & Buttons */
+/* Progress Indicator & Buttons Kobo Style */
 .form-footer {
   background: #fcfcfc;
   padding: 20px 35px;
   border-top: 1px solid #e6e6e6;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+
 .btn {
-  padding: 10px 24px;
+  padding: 10px 20px;
   font-size: 14px;
   font-weight: bold;
   border-radius: 3px;
   cursor: pointer;
   border: 1px solid transparent;
-  transition: all 0.2s;
+  user-select: none;
 }
-.btn-submit {
-  background-color: var(--koboorange);
-  color: white;
-}
-.btn-submit:hover {
-  background-color: #d34817;
-}
-.btn-back {
-  background-color: #fff;
-  border-color: var(--border-color);
-  color: #7f8c8d;
-}
-.btn-back:hover {
-  background-color: #eee;
-}
+.btn-next { background-color: var(--koboblue); color: white; }
+.btn-next:hover { background-color: #2980b9; }
+.btn-submit { background-color: var(--koboorange); color: white; display: none; }
+.btn-submit:hover { background-color: #d34817; }
+.btn-prev { background-color: #fff; border-color: var(--border-color); color: #7f8c8d; }
+.btn-prev:hover { background-color: #eee; }
+.btn-prev:disabled { opacity: 0.5; cursor: not-allowed; }
 </style>
 </head>
 <body>
@@ -196,11 +169,11 @@ textarea.form-control {
     <h2>Survey Pembangunan Keluarga</h2>
   </div>
 
-  <form id="koboSurveyForm" onsubmit="handleSubmit(event)">
+  <form id="koboMultiPageForm" onsubmit="handleSubmit(event)">
     <div class="form-body">
       
-      <div class="kobo-group">
-        <div class="group-title">I. Kependudukan & Wilayah</div>
+      <div class="kobo-page active-page" id="page-1">
+        <div class="group-title">I. Kependudukan & Wilayah (Halaman 1 / 2)</div>
 
         <div class="question">
           <label class="question-label" for="Kecamatan">Kecamatan<span class="required">*</span></label>
@@ -215,88 +188,19 @@ textarea.form-control {
         </div>
 
         <div class="question hidden" data-relevant="getFieldValue('Kecamatan') === 'banjarmasin_timur'">
-          <label class="question-label" for="Kelurahan1">Kelurahan1<span class="required">*</span></label>
+          <label class="question-label" for="Kelurahan1">Kelurahan (Banjarmasin Timur)<span class="required">*</span></label>
           <select name="Kelurahan" id="Kelurahan1" class="form-control" data-required-if="getFieldValue('Kecamatan') === 'banjarmasin_timur'">
             <option value="">Select one</option>
             <option value="benua_anyar">Benua Anyar</option>
-            <option value="karang_mekar">Karang Mekar</option>
             <option value="kebun_bunga">Kebun Bunga</option>
-            <option value="kuripan">Kuripan</option>
-            <option value="pekapuran_raya">Pekapuran Raya</option>
-            <option value="pengambangan">Pengambangan</option>
-            <option value="pemurus_luar">Pemurus Luar</option>
-            <option value="sungai_bilu">Sungai Bilu</option>
-            <option value="sungai_lulut">Sungai Lulut</option>
           </select>
         </div>
 
         <div class="question hidden" data-relevant="getFieldValue('Kecamatan') === 'banjarmasin_tengah'">
-          <label class="question-label" for="Kelurahan2">Kelurahan2<span class="required">*</span></label>
+          <label class="question-label" for="Kelurahan2">Kelurahan (Banjarmasin Tengah)<span class="required">*</span></label>
           <select name="Kelurahan" id="Kelurahan2" class="form-control" data-required-if="getFieldValue('Kecamatan') === 'banjarmasin_tengah'">
             <option value="">Select one</option>
             <option value="antasan_besar">Antasan Besar</option>
-            <option value="gadang">Gadang</option>
-            <option value="kertak_baru_ilir">Kertak Baru Ilir</option>
-            <option value="kertak_baru_ulu">Kertak Baru Ulu</option>
-            <option value="mawar">Mawar</option>
-            <option value="melayu">Melayu</option>
-            <option value="pasar_lama">Pasar Lama</option>
-            <option value="pekapuran_laut">Pekapuran Laut</option>
-            <option value="seberang_mesjid">Seberang Mesjid</option>
-            <option value="sungai_baru">Sungai Baru</option>
-            <option value="teluk_dalam">Teluk Dalam</option>
-          </select>
-        </div>
-
-        <div class="question hidden" data-relevant="getFieldValue('Kecamatan') === 'banjarmasin_selatan'">
-          <label class="question-label" for="Kelurahan3">Kelurahan3<span class="required">*</span></label>
-          <select name="Kelurahan" id="Kelurahan3" class="form-control" data-required-if="getFieldValue('Kecamatan') === 'banjarmasin_selatan'">
-            <option value="">Select one</option>
-            <option value="basirih_hilir">Basirih Hilir</option>
-            <option value="kelayan_barat">Kelayan Barat</option>
-            <option value="kelayan_dalam">Kelayan Dalam</option>
-            <option value="kelayan_timur">Kelayan Timur</option>
-            <option value="kelayan_tengah">Kelayan Tengah</option>
-            <option value="kelayan_selatan">Kelayan Selatan</option>
-            <option value="mantuil">Mantuil</option>
-            <option value="murung_raya">Murung Raya</option>
-            <option value="pekapuran_raya_selatan">Pekapuran Raya Selatan</option>
-            <option value="pemurus_dalam">Pemurus Dalam</option>
-            <option value="pemurus_baru">Pemurus Baru</option>
-            <option value="tanjung_pagar">Tanjung Pagar</option>
-          </select>
-        </div>
-
-        <div class="question hidden" data-relevant="getFieldValue('Kecamatan') === 'banjarmasin_barat'">
-          <label class="question-label" for="Kelurahan4">Kelurahan4<span class="required">*</span></label>
-          <select name="Kelurahan" id="Kelurahan4" class="form-control" data-required-if="getFieldValue('Kecamatan') === 'banjarmasin_barat'">
-            <option value="">Select one</option>
-            <option value="basirih">Basirih</option>
-            <option value="belitung_daratan">Belitung Daratan</option>
-            <option value="belitung_selatan">Belitung Selatan</option>
-            <option value="kedaung">Kedaung</option>
-            <option value="kuin_cerucuk">Kuin Cerucuk</option>
-            <option value="kuin_selatan">Kuin Selatan</option>
-            <option value="pelambuan">Pelambuan</option>
-            <option value="telaga_biru">Telaga Biru</option>
-            <option value="teluk_tiram">Teluk Tiram</option>
-          </select>
-        </div>
-
-        <div class="question hidden" data-relevant="getFieldValue('Kecamatan') === 'banjarmasin_utara'">
-          <label class="question-label" for="Kelurahan5">Kelurahan5<span class="required">*</span></label>
-          <select name="Kelurahan" id="Kelurahan5" class="form-control" data-required-if="getFieldValue('Kecamatan') === 'banjarmasin_utara'">
-            <option value="">Select one</option>
-            <option value="alalak_utara">Alalak Utara</option>
-            <option value="alalak_tengah">Alalak Tengah</option>
-            <option value="alalak_selatan">Alalak Selatan</option>
-            <option value="antasan_kecil_timur">Antasan Kecil Timur</option>
-            <option value="kabilahan">Kabilahan</option>
-            <option value="pangeran">Pangeran</option>
-            <option value="surgi_mufti">Surgi Mufti</option>
-            <option value="sungai_andai">Sungai Andai</option>
-            <option value="sungai_jingah">Sungai Jingah</option>
-            <option value="sungai_miai">Sungai Miai</option>
           </select>
         </div>
 
@@ -312,44 +216,28 @@ textarea.form-control {
         </div>
 
         <div class="question">
-          <label class="question-label" for="Alamat">Alamat Rumah / No. Rumah<span class="required">*</span></label>
+          <label class="question-label" for="Alamat">Alamat Rumah<span class="required">*</span></label>
           <textarea name="Alamat" id="Alamat" class="form-control" required></textarea>
         </div>
       </div>
 
-      <div class="kobo-group">
-        <div class="group-title">II. Kondisi Sanitasi & Lingkungan</div>
+      <div class="kobo-page" id="page-2">
+        <div class="group-title">II. Kondisi Sanitasi & Lingkungan (Halaman 2 / 2)</div>
 
         <div class="question">
           <label class="question-label">Kepemilikan Fasilitas Tempat Buang Air Besar<span class="required">*</span></label>
           <div class="option-list">
-            <label class="option-item">
-              <input type="radio" name="FasilitasBAB" value="1__sendiri"> 1. Milik Sendiri
-            </label>
-            <label class="option-item">
-              <input type="radio" name="FasilitasBAB" value="2__bersama"> 2. Milik Bersama / Komunal
-            </label>
-            <label class="option-item">
-              <input type="radio" name="FasilitasBAB" value="3__umum"> 3. Fasilitas Umum / MCK
-            </label>
-            <label class="option-item">
-              <input type="radio" name="FasilitasBAB" value="0__tidak_ada"> 0. Tidak Ada Fasilitas (Bukan BABS)
-            </label>
+            <label class="option-item"><input type="radio" name="FasilitasBAB" value="1__sendiri"> 1. Milik Sendiri</label>
+            <label class="option-item"><input type="radio" name="FasilitasBAB" value="2__bersama"> 2. Milik Bersama / Komunal</label>
+            <label class="option-item"><input type="radio" name="FasilitasBAB" value="0__tidak_ada"> 0. Tidak Ada Fasilitas</label>
           </div>
         </div>
 
         <div class="question hidden" data-relevant="getFieldValue('FasilitasBAB') !== '' && getFieldValue('FasilitasBAB') !== '0__tidak_ada'">
           <label class="question-label">Jenis Kloset yang Digunakan<span class="required">*</span></label>
           <div class="option-list">
-            <label class="option-item">
-              <input type="radio" name="JenisKloset" value="1__leher_angsa" data-required-if="getFieldValue('FasilitasBAB') !== '' && getFieldValue('FasilitasBAB') !== '0__tidak_ada'"> 1. Leher Angsa
-            </label>
-            <label class="option-item">
-              <input type="radio" name="JenisKloset" value="2__plengsengan" data-required-if="getFieldValue('FasilitasBAB') !== '' && getFieldValue('FasilitasBAB') !== '0__tidak_ada'"> 2. Plengsengan dengan Tutup
-            </label>
-            <label class="option-item">
-              <input type="radio" name="JenisKloset" value="3__cemplung" data-required-if="getFieldValue('FasilitasBAB') !== '' && getFieldValue('FasilitasBAB') !== '0__tidak_ada'"> 3. Cemplung / Cubluk Tanpa Tutup
-            </label>
+            <label class="option-item"><input type="radio" name="JenisKloset" value="1__leher_angsa" data-required-if="getFieldValue('FasilitasBAB') !== '' && getFieldValue('FasilitasBAB') !== '0__tidak_ada'"> 1. Leher Angsa</label>
+            <label class="option-item"><input type="radio" name="JenisKloset" value="2__plengsengan" data-required-if="getFieldValue('FasilitasBAB') !== '' && getFieldValue('FasilitasBAB') !== '0__tidak_ada'"> 2. Plengsengan dengan Tutup</label>
           </div>
         </div>
 
@@ -358,49 +246,88 @@ textarea.form-control {
           <select name="PembuanganTinja" id="PembuanganTinja" class="form-control" required>
             <option value="">Select one</option>
             <option value="tangki_septik">Tangki Septik (Sesuai Standar)</option>
-            <option value="tangki_septik_tidak_standar">Tangki Septik (Bocor/Tidak Standar)</option>
             <option value="sungai_selokan">Sungai / Selokan / Kolam</option>
-            <option value="lubang_tanah">Lubang Tanah Tanpa Dinding</option>
-            <option value="pantai_laut">Pantai / Laut / Lahan Terbuka</option>
           </select>
         </div>
-
-        <div class="question">
-          <label class="question-label" for="SumberAirMinum">Sumber Air Minum Utama Rumah Tangga<span class="required">*</span></label>
-          <select name="SumberAirMinum" id="SumberAirMinum" class="form-control" required>
-            <option value="">Select one</option>
-            <option value="pdam">Air Kemasan / Isi Ulang / Leding (PDAM)</option>
-            <option value="sumur_terlindung">Sumur Bor / Sumur Pompa Terlindung</option>
-            <option value="sumur_tak_terlindung">Sumur Gali / Mata Air Tak Terlindung</option>
-            <option value="air_hujan">Air Hujan Penampungan</option>
-            <option value="air_sungai">Air Sungai / Danau / Waduk</option>
-          </select>
-        </div>
-
       </div>
+
     </div>
 
     <div class="form-footer">
-      <button type="button" class="btn btn-back" onclick="window.history.back()">Exit</button>
-      <button type="submit" class="btn btn-submit">Submit</button>
+      <button type="button" class="btn btn-prev" id="prevBtn" onclick="changePage(-1)" disabled>Previous</button>
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-next" id="nextBtn" onclick="changePage(1)">Next</button>
+        <button type="submit" class="btn btn-submit" id="submitBtn">Submit</button>
+      </div>
     </div>
   </form>
 </div>
 
 <script>
-// Helper Ambil Nilai Field
+let currentPageIdx = 0;
+const pages = document.querySelectorAll('.kobo-page');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const submitBtn = document.getElementById('submitBtn');
+
+// Fungsi Navigasi Halaman
+function changePage(step) {
+  // Jika menekan tombol 'Next', validasi dulu data di halaman saat ini
+  if (step === 1 && !validateCurrentPage()) {
+    alert('Mohon isi semua data yang wajib pada halaman ini sebelum melanjutkan.');
+    return;
+  }
+
+  pages[currentPageIdx].classList.remove('active-page');
+  currentPageIdx += step;
+  pages[currentPageIdx].classList.add('active-page');
+
+  // Update status tombol kontrol
+  prevBtn.disabled = (currentPageIdx === 0);
+  
+  if (currentPageIdx === pages.length - 1) {
+    nextBtn.style.display = 'none';
+    submitBtn.style.display = 'block';
+  } else {
+    nextBtn.style.display = 'block';
+    submitBtn.style.display = 'none';
+  }
+  
+  window.scrollTo(0, 0);
+}
+
+// Hanya validasi field yang ada di halaman aktif saat ini
+function validateCurrentPage() {
+  const activePage = pages[currentPageIdx];
+  const fields = activePage.querySelectorAll('input[required], select[required], textarea[required]');
+  let isValid = true;
+  
+  fields.forEach(f => {
+    // Abaikan validasi jika komponen induknya sedang tersembunyi (data-relevant tidak aktif)
+    if (f.closest('.question.hidden')) return;
+
+    if (f.type === 'radio') {
+      const checked = activePage.querySelector(`input[name="${f.name}"]:checked`);
+      if (!checked) isValid = false;
+    } else {
+      if (!f.value.trim()) isValid = false;
+    }
+  });
+  return isValid;
+}
+
+// Fungsi Bantu Pengisian Data
 function getFieldValue(name) {
   const radios = document.querySelectorAll(`input[type="radio"][name="${name}"]`);
   if (radios.length > 0) {
-    let checkedValue = '';
-    radios.forEach(r => { if (r.checked) checkedValue = r.value; });
-    return checkedValue;
+    let val = '';
+    radios.forEach(r => { if (r.checked) val = r.value; });
+    return val;
   }
   const el = document.querySelector(`select[name="${name}"], input[name="${name}"], textarea[name="${name}"]`);
   return el ? el.value : '';
 }
 
-// Menaruh Nilai ke Field (Pre-Fill)
 function setFieldValue(name, value) {
   if (value === null || value === undefined) value = '';
   const strValue = String(value);
@@ -414,18 +341,12 @@ function setFieldValue(name, value) {
   }
 
   const select = document.querySelector(`select[name="${name}"]`);
-  if (select) {
-    select.value = strValue;
-    return;
-  }
+  if (select) { select.value = strValue; return; }
 
   const input = document.querySelector(`input[name="${name}"], textarea[name="${name}"]`);
-  if (input) {
-    if (input.type !== 'file') input.value = strValue;
-  }
+  if (input) input.value = strValue;
 }
 
-// Logika Kondisional Show/Hide Otomatis (Sama dengan XLSForm Relevant)
 function evaluateAllRelevance() {
   document.querySelectorAll('[data-relevant]').forEach(container => {
     const expr = container.getAttribute('data-relevant');
@@ -440,9 +361,7 @@ function evaluateAllRelevance() {
           else el.value = '';
         });
       }
-    } catch (e) {
-      console.error('Error:', e);
-    }
+    } catch (e) { console.error(e); }
   });
 
   document.querySelectorAll('[data-required-if]').forEach(el => {
@@ -464,7 +383,11 @@ function attachChangeListeners() {
 
 function handleSubmit(event) {
   event.preventDefault();
-  alert('Data Terkirim Berhasil!');
+  if (!validateCurrentPage()) {
+    alert('Mohon isi seluruh field yang diperlukan.');
+    return;
+  }
+  alert('Data Sukses Diperbarui!');
 }
 
 function prefillData(data) {
@@ -478,21 +401,19 @@ document.addEventListener('DOMContentLoaded', function() {
   attachChangeListeners();
   evaluateAllRelevance();
 
-  // === DATA SIMULASI UTK DI EDIT (SAMA PERSIS SEPERTI STRUKTUR DATABASE) ===
-  const dataEditMasyarakat = {
+  // === SIMULASI DATA EDIT DARI BACKEND ===
+  const dataEdit = {
     "Kecamatan": "banjarmasin_timur",
     "Kelurahan": "kebun_bunga",
-    "RT": "5",
-    "RW": "1",
-    "Alamat": "Jl. Veteran Gg. Sempati",
+    "RT": "10",
+    "RW": "2",
+    "Alamat": "Jl. Kebun Bunga No. 12",
     "FasilitasBAB": "1__sendiri",
     "JenisKloset": "1__leher_angsa",
-    "PembuanganTinja": "tangki_septik",
-    "SumberAirMinum": "pdam"
+    "PembuanganTinja": "tangki_septik"
   };
 
-  // Jalankan inject data ke KoboForm
-  prefillData(dataEditMasyarakat);
+  prefillData(dataEdit);
 });
 </script>
 </body>
