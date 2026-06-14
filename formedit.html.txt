@@ -1,0 +1,1567 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Survey Pembangunan Keluarga - KoboToolbox</title>
+<style>
+/* ===== KOBO TOOLBOX / ENKETO STYLE ===== */
+:root {
+  --kobo-orange: #ef5a24;
+  --kobo-blue: #3498db;
+  --kobo-dark: #2c3e50;
+  --kobo-gray: #7f8c8d;
+  --kobo-light-gray: #ecf0f1;
+  --kobo-border: #bdc3c7;
+  --kobo-bg: #f4f4f4;
+  --kobo-paper: #ffffff;
+  --kobo-red: #c0392b;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background-color: var(--kobo-bg);
+  color: var(--kobo-dark);
+  padding: 30px 15px;
+  display: flex;
+  justify-content: center;
+  line-height: 1.5;
+}
+
+.enketo-form-container {
+  width: 100%;
+  max-width: 800px;
+  background: var(--kobo-paper);
+  border: 1px solid var(--kobo-border);
+  border-top: 6px solid var(--kobo-orange);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.form-header {
+  padding: 25px 35px;
+  border-bottom: 1px solid #e6e6e6;
+}
+.form-header h2 {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--kobo-dark);
+}
+.form-header .sub {
+  font-size: 13px;
+  color: var(--kobo-gray);
+  margin-top: 4px;
+}
+
+/* Progress */
+.progress-wrap {
+  padding: 15px 35px;
+  background: #fafafa;
+  border-bottom: 1px solid #e6e6e6;
+}
+.progress-bar {
+  height: 8px;
+  background: #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--kobo-blue), var(--kobo-orange));
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+.progress-text {
+  font-size: 12px;
+  color: var(--kobo-gray);
+  text-align: center;
+  margin-top: 8px;
+  font-weight: 500;
+}
+
+/* Section Tabs */
+.section-tabs {
+  display: flex;
+  gap: 0;
+  padding: 0;
+  background: #fafafa;
+  border-bottom: 1px solid #e6e6e6;
+  overflow-x: auto;
+}
+.section-tab {
+  padding: 12px 18px;
+  border: none;
+  background: transparent;
+  color: var(--kobo-gray);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -1px;
+  font-family: inherit;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  transition: all 0.2s;
+}
+.section-tab:hover {
+  color: var(--kobo-blue);
+  background: rgba(52,152,219,0.05);
+}
+.section-tab.active {
+  color: var(--kobo-orange);
+  border-bottom-color: var(--kobo-orange);
+  background: #fff;
+}
+
+/* Form Body */
+.form-body {
+  padding: 25px 35px;
+  min-height: 400px;
+}
+
+/* Pages */
+.kobo-page {
+  display: none;
+}
+.kobo-page.active-page {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Group Title */
+.group-title {
+  font-size: 14px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: var(--kobo-gray);
+  margin-bottom: 25px;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--kobo-light-gray);
+  padding-bottom: 10px;
+}
+
+/* Questions */
+.question {
+  margin-bottom: 25px;
+  padding-bottom: 5px;
+}
+.question.hidden {
+  display: none !important;
+}
+
+.question-label {
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: var(--kobo-dark);
+  line-height: 1.4;
+}
+.question-label .required {
+  color: var(--kobo-red);
+  margin-left: 3px;
+}
+
+.hint-text {
+  font-size: 12px;
+  color: var(--kobo-gray);
+  margin-bottom: 8px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* Form Controls */
+.form-control {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid var(--kobo-border);
+  border-radius: 2px;
+  background-color: #fff;
+  color: var(--kobo-dark);
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.form-control:focus {
+  outline: none;
+  border-color: var(--kobo-blue);
+  box-shadow: 0 0 0 3px rgba(52,152,219,0.1);
+}
+.form-control:invalid {
+  border-color: var(--kobo-red);
+}
+textarea.form-control {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Radio Options */
+.option-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 5px;
+}
+.option-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 3px;
+  transition: background 0.15s;
+  border: 1px solid transparent;
+}
+.option-item:hover {
+  background: #f8f9fa;
+  border-color: #e9ecef;
+}
+.option-item input[type="radio"] {
+  margin-top: 2px;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--kobo-orange);
+  flex-shrink: 0;
+}
+.option-item.selected {
+  background: #fff3e0;
+  border-color: #ffcc80;
+}
+
+/* Grid */
+.grid-row {
+  display: flex;
+  gap: 20px;
+}
+.grid-col {
+  flex: 1;
+}
+
+/* Constraint Message */
+.constraint-msg {
+  color: var(--kobo-red);
+  font-size: 12px;
+  margin-top: 6px;
+  display: none;
+  background: #fdeaea;
+  padding: 6px 10px;
+  border-radius: 3px;
+  border-left: 3px solid var(--kobo-red);
+}
+.constraint-msg.show {
+  display: block;
+}
+
+/* Repeat Items */
+.repeat-item {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 18px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+}
+.repeat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+.repeat-title {
+  font-weight: bold;
+  color: var(--kobo-dark);
+  font-size: 14px;
+}
+
+/* Footer */
+.form-footer {
+  background: #fcfcfc;
+  padding: 20px 35px;
+  border-top: 1px solid #e6e6e6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  padding: 10px 24px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 3px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+  font-family: inherit;
+  transition: all 0.15s;
+}
+.btn-next {
+  background-color: var(--kobo-blue);
+  color: white;
+}
+.btn-next:hover {
+  background-color: #2980b9;
+}
+.btn-submit {
+  background-color: var(--kobo-orange);
+  color: white;
+  display: none;
+}
+.btn-submit:hover {
+  background-color: #d34817;
+}
+.btn-prev {
+  background-color: #fff;
+  border-color: var(--kobo-border);
+  color: var(--kobo-gray);
+}
+.btn-prev:hover {
+  background-color: #f0f0f0;
+}
+.btn-prev:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.btn-outline {
+  background: #fff;
+  border: 1px solid var(--kobo-border);
+  color: var(--kobo-dark);
+  font-size: 12px;
+  padding: 6px 14px;
+}
+.btn-outline:hover {
+  background: #f5f5f5;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  body { padding: 15px 10px; }
+  .form-header { padding: 20px; }
+  .form-body { padding: 20px; }
+  .progress-wrap { padding: 12px 20px; }
+  .section-tab { padding: 10px 12px; font-size: 10px; }
+  .grid-row { flex-direction: column; gap: 0; }
+  .form-footer { padding: 15px 20px; flex-direction: column; gap: 10px; }
+  .nav-buttons { width: 100%; }
+  .btn { width: 100%; text-align: center; }
+}
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="enketo-form-container">
+  <div class="form-header">
+    <h2>Survey Pembangunan Keluarga</h2>
+    <div class="sub">Dinas PPKBPM Kota Banjarmasin · iBangga 2026 · Data bersifat rahasia</div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-text" id="progressText">Halaman 1 / 9</div>
+  </div>
+
+  <div class="section-tabs" id="sectionTabs">
+    <button class="section-tab active" onclick="goToPage(0)">Informasi Umum</button>
+    <button class="section-tab" onclick="goToPage(1)">Lokasi & Responden</button>
+    <button class="section-tab" onclick="goToPage(2)">Identitas Responden</button>
+    <button class="section-tab" onclick="goToPage(3)">Kondisi Rumah</button>
+    <button class="section-tab" onclick="goToPage(4)">Sanitasi & Air</button>
+    <button class="section-tab" onclick="goToPage(5)">Rekreasi Keluarga</button>
+    <button class="section-tab" onclick="goToPage(6)">Jumlah Anggota Keluarga</button>
+    <button class="section-tab" onclick="goToPage(7)">Data Anggota Keluarga</button>
+    <button class="section-tab" onclick="goToPage(8)">Dokumentasi</button>
+  </div>
+
+  <form id="koboMultiPageForm" onsubmit="handleSubmit(event)">
+    <div class="form-body">
+      <div class="kobo-page active-page" id="page-1">
+        <div class="group-title">Informasi Umum (Halaman 1 / 9)</div>
+        <div class="question" id="f_0_0" data-name="Sampel_utama_pengganti">
+          <label class="question-label" for="inp_f_0_0">Sampel utama/pengganti?<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Sampel_utama_pengganti" value="1__utama" required> 1. Utama</label>
+            <label class="option-item"><input type="radio" name="Sampel_utama_pengganti" value="0__pengganti" required> 0. Pengganti</label>
+          </div>
+        </div>
+        <div class="question" id="f_0_1" data-name="SELAMAT_PAGI_SIANG_S_IBU_BERSEDIA_DIDATA">
+          <label class="question-label" for="inp_f_0_1">SELAMAT PAGI/SIANG/SORE BAPAK/IBU, SAYA DARI DINAS PPKBPM, AKAN MENDATA TENTANG INFORMASI TERKAIT PEMBANGUNAN KELUARGA. DATA BERSIFAT RAHASIA. APAKAH BAPAK/IBU BERSEDIA DIDATA?<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="SELAMAT_PAGI_SIANG_S_IBU_BERSEDIA_DIDATA" value="1__ya" required> 1. Ya</label>
+          </div>
+        </div>
+        <div class="question" id="f_0_2" data-name="Tanggal_Pengisian">
+          <label class="question-label" for="inp_f_0_2">Tanggal Pengisian<span class="required">*</span></label>
+          <input type="date" name="Tanggal_Pengisian" id="inp_f_0_2" class="form-control" required>
+        </div>
+        <div class="question" id="f_0_3" data-name="Kode_Petugas">
+          <label class="question-label" for="inp_f_0_3">Kode Petugas<span class="required">*</span></label>
+          <input type="number" name="Kode_Petugas" id="inp_f_0_3" class="form-control" max="52" required>
+<div class="constraint-msg" id="cm_f_0_3">Jumlah petugas yang terdaftar tidak lebih dari 52 orang</div>        </div>
+        <div class="question" id="f_0_4" data-name="Nama_Petugas">
+          <label class="question-label" for="inp_f_0_4">Nama Petugas<span class="required">*</span></label>
+          <input type="text" name="Nama_Petugas" id="inp_f_0_4" class="form-control" required>
+        </div>
+      </div>
+      <div class="kobo-page" id="page-2">
+        <div class="group-title">Lokasi & Responden (Halaman 2 / 9)</div>
+        <div class="question" id="f_1_0" data-name="Kecamatan">
+          <label class="question-label" for="inp_f_1_0">Kecamatan<span class="required">*</span></label>
+          <select name="Kecamatan" id="inp_f_1_0" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="banjarmasin_timur">010. Banjarmasin Selatan</option>
+            <option value="banjarmasin_tengah">020. Banjarmasin Timur</option>
+            <option value="banjarmasin_selatan">030. Banjarmasin Barat</option>
+            <option value="banjarmasi_barat">031. Banjarmasi Tengah</option>
+            <option value="banjarmasin_utara">040. Banjarmasin Utara</option>
+          </select>
+        </div>
+        <div class="question" id="f_1_1" data-name="Kelurahan1" data-relevant="getFieldValue(\'Kecamatan\') === \'banjarmasin_timur\'">
+          <label class="question-label" for="inp_f_1_1">Kelurahan1<span class="required">*</span></label>
+          <select name="Kelurahan1" id="inp_f_1_1" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="option_1">001. mantuil</option>
+            <option value="option_2">002. kelayan selatan</option>
+            <option value="003__kelayan_timur">003. kelayan timur</option>
+            <option value="004__tanjung_pagar">004. tanjung pagar</option>
+            <option value="005__pemurus_dalam">005. pemurus dalam</option>
+            <option value="006__pemurus_baru">006. pemurus baru</option>
+            <option value="007__murung_raya">007. murung raya</option>
+            <option value="008__kelayan_dalam">008. kelayan dalam</option>
+            <option value="009__kelayan_tengah">009. kelayan tengah</option>
+            <option value="010__pekauman">010. pekauman</option>
+            <option value="011__kelayan_barat">011. kelayan barat</option>
+            <option value="012__basirih_selatan">012. basirih selatan</option>
+          </select>
+        </div>
+        <div class="question" id="f_1_2" data-name="Kelurahan2" data-relevant="getFieldValue(\'Kecamatan\') === \'banjarmasin_tengah\'">
+          <label class="question-label" for="inp_f_1_2">Kelurahan2<span class="required">*</span></label>
+          <select name="Kelurahan2" id="inp_f_1_2" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="option_1">001. pekapuran raya</option>
+            <option value="option_2">002. karang mekar</option>
+            <option value="003__kebun_bunga">003. kebun bunga</option>
+            <option value="004__sungai_lulut">004. sungai lulut</option>
+            <option value="005__kuripan">005. kuripan</option>
+            <option value="006__sungai_bilu">006. sungai bilu</option>
+            <option value="007__pengambangan">007. pengambangan</option>
+            <option value="008__banua_anyar">008. banua anyar</option>
+            <option value="009__pemurus_luar">009. pemurus luar</option>
+          </select>
+        </div>
+        <div class="question" id="f_1_3" data-name="Kelurahan3" data-relevant="getFieldValue(\'Kecamatan\') === \'banjarmasin_selatan\'">
+          <label class="question-label" for="inp_f_1_3">Kelurahan3<span class="required">*</span></label>
+          <select name="Kelurahan3" id="inp_f_1_3" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="option_1">001. teluk tiram</option>
+            <option value="option_2">002. telawang</option>
+            <option value="003__telaga_biru">003. telaga biru</option>
+            <option value="004__pelambuan">004. pelambuan</option>
+            <option value="005__belitung_selatan">005. belitung selatan</option>
+            <option value="006__belitung_utara">006. belitung utara</option>
+            <option value="007__basirih">007. basirih</option>
+            <option value="008__kuin_cerucuk">008. kuin cerucuk</option>
+            <option value="009__kuin_selatan">009. kuin selatan</option>
+          </select>
+        </div>
+        <div class="question" id="f_1_4" data-name="Kelurahan4" data-relevant="getFieldValue(\'Kecamatan\') === \'banjarmasi_barat\'">
+          <label class="question-label" for="inp_f_1_4">Kelurahan4<span class="required">*</span></label>
+          <select name="Kelurahan4" id="inp_f_1_4" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="option_1">001. kelayan luar</option>
+            <option value="option_2">002. kertak baru ilir</option>
+            <option value="003__mawar">003. mawar</option>
+            <option value="004__teluk_dalam">004. teluk dalam</option>
+            <option value="005__kertak_baru_ulu">005. kertak baru ulu</option>
+            <option value="006__pekapuran_laut">006. pekapuran laut</option>
+            <option value="007__sungai_baru">007. sungai baru</option>
+            <option value="008__gadang">008. gadang</option>
+            <option value="009__antasan_besar">009. antasan besar</option>
+            <option value="010__pasar_lama">010. pasar lama</option>
+            <option value="011__seberang_mesjid">011. seberang mesjid</option>
+            <option value="012__melayu">012. melayu</option>
+          </select>
+        </div>
+        <div class="question" id="f_1_5" data-name="Kelurahan5" data-relevant="getFieldValue(\'Kecamatan\') === \'banjarmasin_utara\'">
+          <label class="question-label" for="inp_f_1_5">Kelurahan5<span class="required">*</span></label>
+          <select name="Kelurahan5" id="inp_f_1_5" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="option_1">001. kuin utara</option>
+            <option value="option_2">002. pangeran</option>
+            <option value="003__sungai_miai">003. sungai miai</option>
+            <option value="004__antasan_kecil_timur">004. antasan kecil timur</option>
+            <option value="005__surgi_mufti">005. surgi mufti</option>
+            <option value="006__sungai_jingah">006. sungai jingah</option>
+            <option value="007__alalak_utara">007. alalak utara</option>
+            <option value="008__alalak_selatan">008. alalak selatan</option>
+            <option value="009__alalak_tengah">009. alalak tengah</option>
+            <option value="010__sungai_andai">010. sungai andai</option>
+          </select>
+        </div>
+        <div class="question" id="f_1_6" data-name="No_RT_Terpilih">
+          <label class="question-label" for="inp_f_1_6">No RT Terpilih<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="No_RT_Terpilih" value="1" required> 1</label>
+            <label class="option-item"><input type="radio" name="No_RT_Terpilih" value="2" required> 2</label>
+            <label class="option-item"><input type="radio" name="No_RT_Terpilih" value="3" required> 3</label>
+            <label class="option-item"><input type="radio" name="No_RT_Terpilih" value="4" required> 4</label>
+          </div>
+        </div>
+        <div class="question" id="f_1_7" data-name="RT">
+          <label class="question-label" for="inp_f_1_7">RT<span class="required">*</span></label>
+          <input type="number" name="RT" id="inp_f_1_7" class="form-control" max="81" required>
+<div class="constraint-msg" id="cm_f_1_7">Nomor RT tidak boleh lebih dari 80</div>        </div>
+        <div class="question" id="f_1_8" data-name="RW">
+          <label class="question-label" for="inp_f_1_8">RW<span class="required">*</span></label>
+          <input type="number" name="RW" id="inp_f_1_8" class="form-control" max="5" required>
+<div class="constraint-msg" id="cm_f_1_8">Nomor RW kebesaran</div>        </div>
+        <div class="question" id="f_1_9" data-name="Responden_Terpilih_ke">
+          <label class="question-label" for="inp_f_1_9">Responden Terpilih ke<span class="required">*</span></label>
+          <select name="Responden_Terpilih_ke" id="inp_f_1_9" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+      </div>
+      <div class="kobo-page" id="page-3">
+        <div class="group-title">Identitas Responden (Halaman 3 / 9)</div>
+        <div class="question" id="f_2_0" data-name="IR01_Nama_Kepala_Keluarga">
+          <label class="question-label" for="inp_f_2_0">IR01 Nama Kepala Keluarga<span class="required">*</span></label>
+          <input type="text" name="IR01_Nama_Kepala_Keluarga" id="inp_f_2_0" class="form-control" required>
+        </div>
+        <div class="question" id="f_2_1" data-name="IR02_Nomor_Kartu_Keluarga">
+          <label class="question-label" for="inp_f_2_1">IR02 Nomor Kartu Keluarga<span class="required">*</span></label>
+          <input type="number" name="IR02_Nomor_Kartu_Keluarga" id="inp_f_2_1" class="form-control" required>
+        </div>
+        <div class="question" id="f_2_2" data-name="IR03_Alamat_Lengkap">
+          <label class="question-label" for="inp_f_2_2">IR03 Alamat Lengkap<span class="required">*</span></label>
+          <input type="text" name="IR03_Alamat_Lengkap" id="inp_f_2_2" class="form-control" required>
+        </div>
+        <div class="question" id="f_2_3" data-name="IR04_No_HP_WA">
+          <label class="question-label" for="inp_f_2_3">IR04 No. HP/WA<span class="required">*</span></label>
+          <input type="number" name="IR04_No_HP_WA" id="inp_f_2_3" class="form-control" required>
+        </div>
+        <div class="question" id="f_2_4" data-name="Titik_Koordinat">
+          <label class="question-label" for="inp_f_2_4">Titik Koordinat<span class="required">*</span></label>
+          <input type="text" name="Titik_Koordinat" id="inp_f_2_4" class="form-control" placeholder="Latitude, Longitude" required>
+        </div>
+      </div>
+      <div class="kobo-page" id="page-4">
+        <div class="group-title">Kondisi Rumah (Halaman 4 / 9)</div>
+        <div class="question" id="f_3_0" data-name="IR08_Status_Rumah">
+          <label class="question-label" for="inp_f_3_0">IR08 Status Rumah<span class="required">*</span></label>
+          <select name="IR08_Status_Rumah" id="inp_f_3_0" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="milik_sendiri">1. Milik sendiri</option>
+            <option value="kontrak_sewa">2. Kontrak sewa</option>
+            <option value="bebas_sewa_menumpang">3. Bebas sewa/menumpang</option>
+            <option value="dinas">4. Dinas</option>
+            <option value="5__lainnya">5. Lainnya</option>
+          </select>
+        </div>
+        <div class="question" id="f_3_1" data-name="Atap_terluas_rumah_terluar">
+          <label class="question-label" for="inp_f_3_1">Atap terluas rumah (terluar)<span class="required">*</span></label>
+          <select name="Atap_terluas_rumah_terluar" id="inp_f_3_1" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="1__beton_genteng_seng_kayu_sirap">1. beton</option>
+            <option value="0__plastik_lainnya">2. genteng</option>
+            <option value="3__seng">3. seng</option>
+            <option value="4__kayu">4. kayu</option>
+            <option value="5__sirap">5. sirap</option>
+            <option value="0__plastik_lainnya_1">0. plastik/lainnya</option>
+          </select>
+        </div>
+        <div class="question" id="f_3_2" data-name="Kondisi_atas_terluas">
+          <label class="question-label" for="inp_f_3_2">Kondisi atas terluas?<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Kondisi_atas_terluas" value="1__baik" required> 1. Baik</label>
+            <label class="option-item"><input type="radio" name="Kondisi_atas_terluas" value="2__rusak_ringan" required> 2. Rusak ringan</label>
+            <label class="option-item"><input type="radio" name="Kondisi_atas_terluas" value="3__rusak_sedang" required> 3. Rusak sedang</label>
+            <label class="option-item"><input type="radio" name="Kondisi_atas_terluas" value="4__rusak_berat" required> 4. Rusak berat</label>
+          </div>
+        </div>
+        <div class="question" id="f_3_3" data-name="Dinding_terluas_rumah_yang_ditempati">
+          <label class="question-label" for="inp_f_3_3">Dinding terluas rumah yang ditempati<span class="required">*</span></label>
+          <select name="Dinding_terluas_rumah_yang_ditempati" id="inp_f_3_3" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="1__tembok_plesteram_ayaman_bambu_kawat__">1. tembok</option>
+            <option value="0__plastik_lainnya">2. plesteran ayaman bambu/kawat</option>
+            <option value="3__kayu_papan">3. kayu/papan</option>
+            <option value="4__batang_kayu">4. batang kayu</option>
+            <option value="0__plastik_lainnya_1">0. plastik/lainnya</option>
+          </select>
+        </div>
+        <div class="question" id="f_3_4" data-name="Kondisi_dinding_terluas">
+          <label class="question-label" for="inp_f_3_4">Kondisi dinding terluas?<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Kondisi_dinding_terluas" value="1__baik" required> 1. Baik</label>
+            <label class="option-item"><input type="radio" name="Kondisi_dinding_terluas" value="2__rusak_ringan" required> 2. Rusak ringan</label>
+            <label class="option-item"><input type="radio" name="Kondisi_dinding_terluas" value="3__rusak_sedang" required> 3. Rusak sedang</label>
+            <label class="option-item"><input type="radio" name="Kondisi_dinding_terluas" value="4__rusak_berat" required> 4. Rusak berat</label>
+          </div>
+        </div>
+        <div class="question" id="f_3_5" data-name="Lantai_terluas_rumah_yang_ditempati">
+          <label class="question-label" for="inp_f_3_5">Lantai terluas rumah yang ditempati<span class="required">*</span></label>
+          <select name="Lantai_terluas_rumah_yang_ditempati" id="inp_f_3_5" class="form-control" required>
+            <option value="">Select one</option>
+            <option value="1__marmer_granit_keramik_parket_atau_vin">1. marmer/granit/</option>
+            <option value="0__tanah_lainnya">2. keramik/</option>
+            <option value="3__parket_atau_vinil">3. parket atau vinil</option>
+            <option value="4__ubi_tegel_teraso">4. ubi/tegel/teraso</option>
+            <option value="5__kayu_papan">5. kayu/papan</option>
+            <option value="6__semen_bata_merah">6. semen/bata merah</option>
+            <option value="0__tanah_lainnya_1">0. tanah/lainnya</option>
+          </select>
+        </div>
+        <div class="question" id="f_3_6" data-name="Kondisi_lantai_terluas">
+          <label class="question-label" for="inp_f_3_6">Kondisi lantai terluas?<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Kondisi_lantai_terluas" value="1__baik" required> 1. Baik</label>
+            <label class="option-item"><input type="radio" name="Kondisi_lantai_terluas" value="2__rusak_ringan" required> 2. Rusak ringan</label>
+            <label class="option-item"><input type="radio" name="Kondisi_lantai_terluas" value="3__rusak_sedang" required> 3. Rusak sedang</label>
+            <label class="option-item"><input type="radio" name="Kondisi_lantai_terluas" value="4__rusak_berat" required> 4. Rusak berat</label>
+          </div>
+        </div>
+        <div class="question" id="f_3_7" data-name="luas_lantai_rumah_ya_empati_sebatas_atap">
+          <label class="question-label" for="inp_f_3_7">luas lantai rumah yang ditempati (sebatas atap)<span class="required">*</span></label>
+          <input type="number" name="luas_lantai_rumah_ya_empati_sebatas_atap" id="inp_f_3_7" class="form-control" required>
+        </div>
+      </div>
+      <div class="kobo-page" id="page-5">
+        <div class="group-title">Sanitasi & Air (Halaman 5 / 9)</div>
+        <div class="question" id="f_4_0" data-name="Sumber_air_minum_utama">
+          <label class="question-label" for="inp_f_4_0">Sumber air minum utama<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Sumber_air_minum_utama" value="1__ledeng_sumur_bor_pompa_sumu" required> 1. ledeng/sumur bor/pompa/sumur terlindung/mata air terlindung/air hujan</label>
+            <label class="option-item"><input type="radio" name="Sumber_air_minum_utama" value="2__air_kemasan_air_isi_ulang" required> 2. air kemasan/air isi ulang</label>
+            <label class="option-item"><input type="radio" name="Sumber_air_minum_utama" value="3_sungai" required> 3 sungai</label>
+          </div>
+        </div>
+        <div class="question" id="f_4_1" data-name="sumer_air_utama_untuk_mandi_cuci" data-relevant="getFieldValue(\'Sumber_air_minum_utama\') === \'2__air_kemasan_air_isi_ulang\'">
+          <label class="question-label" for="inp_f_4_1">sumer air utama untuk mandi/cuci<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="sumer_air_utama_untuk_mandi_cuci" value="1__ledeng_sumur_bor_pompa_sumur_terlindu" required> 1. ledeng/sumur bor/pompa/sumur terlindung/mata air terlindung/air hujan/air kemasan/air isi ulang</label>
+            <label class="option-item"><input type="radio" name="sumer_air_utama_untuk_mandi_cuci" value="0__sungai_lainnya" required> 0. sungai/lainnya</label>
+          </div>
+        </div>
+        <div class="question" id="f_4_2" data-name="Fasilitas_buang_air_besar">
+          <label class="question-label" for="inp_f_4_2">Fasilitas buang air besar<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Fasilitas_buang_air_besar" value="1__sendiri_bersama_komunal" required> 1. sendiri/bersama/komunal</label>
+            <label class="option-item"><input type="radio" name="Fasilitas_buang_air_besar" value="0__umum_tidak_ada" required> 0. umum/tidak ada</label>
+          </div>
+        </div>
+        <div class="question" id="f_4_3" data-name="Jenis_kloset_yang_digunakan" data-relevant="getFieldValue(\'Fasilitas_buang_air_besar\') === \'1__sendiri_bersama_komunal\'">
+          <label class="question-label" for="inp_f_4_3">Jenis kloset yang digunakan<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Jenis_kloset_yang_digunakan" value="1__leher_angsa" required> 1. leher angsa</label>
+            <label class="option-item"><input type="radio" name="Jenis_kloset_yang_digunakan" value="0__bukan_leher_angsa" required> 0. bukan leher angsa</label>
+          </div>
+        </div>
+        <div class="question" id="f_4_4" data-name="Tempat_pembuangan_akhir_tinja" data-relevant="getFieldValue(\'Jenis_kloset_yang_digunakan\') === \'1__leher_angsa\'">
+          <label class="question-label" for="inp_f_4_4">Tempat pembuangan akhir tinja<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="Tempat_pembuangan_akhir_tinja" value="1__tangki_septik" required> 1. tangki septik</label>
+            <label class="option-item"><input type="radio" name="Tempat_pembuangan_akhir_tinja" value="0__bukan_tangki_septik" required> 0. bukan tangki septik</label>
+          </div>
+        </div>
+      </div>
+      <div class="kobo-page" id="page-6">
+        <div class="group-title">Rekreasi Keluarga (Halaman 6 / 9)</div>
+        <div class="question" id="f_5_0" data-name="DKK12_Selama_enam_b_ersama_di_luar_rumah">
+          <label class="question-label" for="inp_f_5_0">DKK12. Selama enam bulan terakhir, keluarga pernah berekreasi bersama di luar rumah?<span class="required">*</span></label>
+          <div class="option-list">
+            <label class="option-item"><input type="radio" name="DKK12_Selama_enam_b_ersama_di_luar_rumah" value="1__ya" required> 1. Ya</label>
+            <label class="option-item"><input type="radio" name="DKK12_Selama_enam_b_ersama_di_luar_rumah" value="2__tidak" required> 2. Tidak</label>
+          </div>
+        </div>
+      </div>
+      <div class="kobo-page" id="page-7">
+        <div class="group-title">Jumlah Anggota Keluarga (Halaman 7 / 9)</div>
+        <div class="question" id="f_6_0" data-name="Berapa_Jumlah_Anggot_an_Makan_Dirumah_Ini">
+          <label class="question-label" for="inp_f_6_0">Berapa Jumlah Anggota Keluarga yang Tinggal dan Makan Dirumah Ini?<span class="required">*</span></label>
+          <input type="number" name="Berapa_Jumlah_Anggot_an_Makan_Dirumah_Ini" id="inp_f_6_0" class="form-control" required>
+        </div>
+        <div class="question" id="f_6_1" data-name="group_rr1kr26">
+          <label class="question-label" for="inp_f_6_1">Data Anggota Keluarga</label>
+          <input type="text" name="group_rr1kr26" id="inp_f_6_1" class="form-control">
+        </div>
+      </div>
+      <div class="kobo-page" id="page-8">
+        <div class="group-title">Data Anggota Keluarga (Halaman 8 / 9)</div>
+        <div style="border:2px dashed #bdc3c7;border-radius:4px;padding:20px;background:#fafafa;margin-bottom:20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+            <span style="font-weight:bold;color:#2c3e50;font-size:14px;">Data Anggota Keluarga</span>
+            <button type="button" class="btn btn-next" style="padding:8px 16px;font-size:13px;" onclick="addRepeatItem()">+ Tambah Anggota</button>
+          </div>
+          <div id="repeatItems"></div>
+        </div>
+      </div>
+      <div class="kobo-page" id="page-9">
+        <div class="group-title">Dokumentasi (Halaman 9 / 9)</div>
+        <div class="question" id="f_8_0" data-name="Foto_rumah_respoden">
+          <label class="question-label" for="inp_f_8_0">Foto rumah respoden<span class="required">*</span></label>
+          <input type="file" name="Foto_rumah_respoden" id="inp_f_8_0" class="form-control" accept="image/*" required>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="form-footer">
+      <button type="button" class="btn btn-prev" id="prevBtn" onclick="changePage(-1)" disabled>← Sebelumnya</button>
+      <div class="nav-buttons">
+        <button type="button" class="btn btn-next" id="nextBtn" onclick="changePage(1)">Selanjutnya →</button>
+        <button type="submit" class="btn btn-submit" id="submitBtn">💾 Simpan Perubahan</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+let currentPageIdx = 0;
+const totalPages = 9;
+const pages = document.querySelectorAll('.kobo-page');
+const tabs = document.querySelectorAll('.section-tab');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const submitBtn = document.getElementById('submitBtn');
+let repeatCount = 0;
+
+function changePage(step) {
+  if (step === 1 && !validateCurrentPage()) {
+    alert('Mohon isi semua data yang wajib pada halaman ini sebelum melanjutkan.');
+    return;
+  }
+  pages[currentPageIdx].classList.remove('active-page');
+  tabs[currentPageIdx].classList.remove('active');
+  currentPageIdx += step;
+  pages[currentPageIdx].classList.add('active-page');
+  tabs[currentPageIdx].classList.add('active');
+  prevBtn.disabled = (currentPageIdx === 0);
+  if (currentPageIdx === pages.length - 1) {
+    nextBtn.style.display = 'none';
+    submitBtn.style.display = 'block';
+  } else {
+    nextBtn.style.display = 'block';
+    submitBtn.style.display = 'none';
+  }
+  updateProgress();
+  evaluateAllRelevance();
+  window.scrollTo(0, 0);
+}
+
+function goToPage(idx) {
+  if (idx < 0 || idx >= pages.length) return;
+  if (idx > currentPageIdx && !validateCurrentPage()) {
+    alert('Mohon isi semua data yang wajib pada halaman ini.');
+    return;
+  }
+  pages[currentPageIdx].classList.remove('active-page');
+  tabs[currentPageIdx].classList.remove('active');
+  currentPageIdx = idx;
+  pages[currentPageIdx].classList.add('active-page');
+  tabs[currentPageIdx].classList.add('active');
+  prevBtn.disabled = (currentPageIdx === 0);
+  if (currentPageIdx === pages.length - 1) {
+    nextBtn.style.display = 'none';
+    submitBtn.style.display = 'block';
+  } else {
+    nextBtn.style.display = 'block';
+    submitBtn.style.display = 'none';
+  }
+  updateProgress();
+  evaluateAllRelevance();
+}
+
+function updateProgress() {
+  var pct = ((currentPageIdx + 1) / totalPages) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = 'Halaman ' + (currentPageIdx + 1) + ' / ' + totalPages;
+}
+
+function validateCurrentPage() {
+  var activePage = pages[currentPageIdx];
+  var fields = activePage.querySelectorAll('input[required], select[required], textarea[required]');
+  var isValid = true;
+  fields.forEach(function(f) {
+    if (f.closest('.question.hidden')) return;
+    if (f.type === 'radio') {
+      var checked = activePage.querySelector('input[name="' + f.name + '"]:checked');
+      if (!checked) isValid = false;
+    } else {
+      if (!f.value.trim()) isValid = false;
+    }
+  });
+  return isValid;
+}
+
+function getFieldValue(name) {
+  var radios = document.querySelectorAll('input[type="radio"][name="' + name + '"]');
+  if (radios.length > 0) {
+    var val = '';
+    radios.forEach(function(r) { if (r.checked) val = r.value; });
+    return val;
+  }
+  var el = document.querySelector('select[name="' + name + '"], input[name="' + name + '"], textarea[name="' + name + '"]');
+  return el ? el.value : '';
+}
+
+function setFieldValue(name, value) {
+  if (value === null || value === undefined) value = '';
+  var strValue = String(value);
+  var radios = document.querySelectorAll('input[type="radio"][name="' + name + '"]');
+  if (radios.length > 0) {
+    radios.forEach(function(r) {
+      r.checked = (r.value === strValue || String(r.value).split('__')[0] === strValue);
+      if (r.checked) r.parentElement.classList.add('selected');
+      else r.parentElement.classList.remove('selected');
+    });
+    return;
+  }
+  var select = document.querySelector('select[name="' + name + '"]');
+  if (select) { select.value = strValue; return; }
+  var input = document.querySelector('input[name="' + name + '"], textarea[name="' + name + '"]');
+  if (input) input.value = strValue;
+}
+
+function evaluateAllRelevance() {
+  document.querySelectorAll('[data-relevant]').forEach(function(container) {
+    var expr = container.getAttribute('data-relevant');
+    if (!expr) return;
+    try {
+      var isRelevant = new Function('getFieldValue', 'return (' + expr + ');')(getFieldValue);
+      if (isRelevant) {
+        container.classList.remove('hidden');
+      } else {
+        container.classList.add('hidden');
+        container.querySelectorAll('input, select, textarea').forEach(function(el) {
+          if (el.type === 'radio') { el.checked = false; el.parentElement.classList.remove('selected'); }
+          else el.value = '';
+        });
+      }
+    } catch (e) { console.error(e); }
+  });
+}
+
+function attachChangeListeners() {
+  document.querySelectorAll('input[name], select[name], textarea[name]').forEach(function(el) {
+    el.addEventListener('change', evaluateAllRelevance);
+    if (el.tagName === 'SELECT' || el.tagName === 'TEXTAREA' || el.type === 'text' || el.type === 'number') {
+      el.addEventListener('input', evaluateAllRelevance);
+    }
+  });
+}
+
+document.addEventListener('click', function(e) {
+  var opt = e.target.closest('.option-item');
+  if (opt) {
+    var group = opt.closest('.option-list');
+    if (group) {
+      group.querySelectorAll('.option-item').forEach(function(o) { o.classList.remove('selected'); });
+      opt.classList.add('selected');
+      opt.querySelector('input').checked = true;
+      evaluateAllRelevance();
+    }
+  }
+});
+
+function handleSubmit(event) {
+  event.preventDefault();
+  if (!validateCurrentPage()) {
+    alert('Mohon isi seluruh field yang diperlukan.');
+    return;
+  }
+  var data = {};
+  document.querySelectorAll('input[name], select[name], textarea[name]').forEach(function(el) {
+    if (el.type === 'radio') { if (el.checked) data[el.name] = el.value; }
+    else if (el.type === 'file') { data[el.name] = el.files[0] ? el.files[0].name : ''; }
+    else { data[el.name] = el.value; }
+  });
+  console.log('Data tersimpan:', data);
+  alert('✅ Data berhasil disimpan! (Lihat console untuk detail)');
+}
+
+function loadEditData() {
+  var editId = localStorage.getItem('edit_id');
+  if (!editId) return;
+  console.log('Loading data for ID:', editId);
+  // fetch(WEB_APP_URL + "?action=getDataById&id=" + editId)
+}
+
+function addRepeatItem() {
+  repeatCount++;
+  var idx = repeatCount;
+  var container = document.getElementById('repeatItems');
+  var item = document.createElement('div');
+  item.className = 'repeat-item';
+  item.id = 'repeat_' + idx;
+
+  var html = '<div class="repeat-header">';
+  html += '<span class="repeat-title">Anggota Keluarga #' + idx + '</span>';
+  html += '<button type="button" class="btn btn-outline" onclick="removeRepeatItem(' + idx + ')">Hapus</button>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="rt_repeat">';
+  html += '<label class="question-label" style="font-size:14px;">rt_repeat</label>';
+  html += '<input type="hidden" name="rt_repeat_' + idx + '">';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="resp_repeat">';
+  html += '<label class="question-label" style="font-size:14px;">resp_repeat</label>';
+  html += '<input type="hidden" name="resp_repeat_' + idx + '">';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="nourut_otomatis">';
+  html += '<label class="question-label" style="font-size:14px;">nourut_otomatis</label>';
+  html += '<input type="hidden" name="nourut_otomatis_' + idx + '">';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="nama_kk_repeat">';
+  html += '<label class="question-label" style="font-size:14px;">nama_kk_repeat</label>';
+  html += '<input type="hidden" name="nama_kk_repeat_' + idx + '">';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="No_Urut">';
+  html += '<label class="question-label" style="font-size:14px;">No_Urut</label>';
+  html += '<input type="hidden" name="No_Urut_' + idx + '">';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Nama_Anggota_Keluarga">';
+  html += '<label class="question-label" style="font-size:14px;">Nama Anggota Keluarga<span class="required">*</span></label>';
+  html += '<input type="text" name="Nama_Anggota_Keluarga_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Hubungan_Dengan_Kepala_Keluarga">';
+  html += '<label class="question-label" style="font-size:14px;">Hubungan Dengan Kepala Keluarga<span class="required">*</span></label>';
+  html += '<select name="Hubungan_Dengan_Kepala_Keluarga_' + idx + '" class="form-control" required>';
+  html += '<option value="">Select one</option>';
+  html += '<option value="1_krt">1.Kepala Keluarga</option>';
+  html += '<option value="2_istri_suami">2.Istri/Suami</option>';
+  html += '<option value="3_anak">3.Anak</option>';
+  html += '<option value="4_menantu">4.Menantu</option>';
+  html += '<option value="5_cucu">5.Cucu</option>';
+  html += '<option value="6_orang_tua_mertua">6.Orang Tua/Mertua</option>';
+  html += '<option value="7_kerabat_lain">7.Kerabat Lain</option>';
+  html += '<option value="8_pembantu">8.Pembantu</option>';
+  html += '<option value="9_lainnya">9.Lainnya</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jenis_Kelamin">';
+  html += '<label class="question-label" style="font-size:14px;">Jenis Kelamin<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Jenis_Kelamin_' + idx + '" value="laki_laki" required> 1. Laki-laki</label>';
+  html += '<label class="option-item"><input type="radio" name="Jenis_Kelamin_' + idx + '" value="perempuan" required> 2. Perempuan</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="umur">';
+  html += '<label class="question-label" style="font-size:14px;">umur<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Pembulatan kebawah)</div>';
+  html += '<input type="number" name="umur_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="statusperkawinan">';
+  html += '<label class="question-label" style="font-size:14px;">statusperkawinan<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Kawin bawah tangan termasuk kawin. Punya anak diluar nikah termasuk cerai hidup)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="statusperkawinan_' + idx + '" value="1_belum_kawin" required> 1.belumkawin</label>';
+  html += '<label class="option-item"><input type="radio" name="statusperkawinan_' + idx + '" value="2_kawin" required> 2.Kawin</label>';
+  html += '<label class="option-item"><input type="radio" name="statusperkawinan_' + idx + '" value="3_cerai_hidup" required> 3.Cerai hidup</label>';
+  html += '<label class="option-item"><input type="radio" name="statusperkawinan_' + idx + '" value="4_cerai_mati" required> 4.Cerai mati</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_Memiliki_buku_nikah_yan" data-relevant="getFieldValue(\'statusperkawinan\') === \'2_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT02Apakah Memiliki buku nikah yang disahkan oleh pejabat yang berwenang (Status kawin)<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_Memiliki_buku_nikah_yan_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_Memiliki_buku_nikah_yan_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKT03_Jika_tidak_me_alasannya_Tuliskan" data-relevant="getFieldValue(\'statusperkawinan\') === \'2_kawin\' && getFieldValue(\'Apakah_Memiliki_buku_nikah_yan\') === \'2__tidak\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT03. Jika tidak memilik apakah alasannya (Tuliskan)?<span class="required">*</span></label>';
+  html += '<input type="text" name="DKT03_Jika_tidak_me_alasannya_Tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_pernah_bercerai_hidup_s" data-relevant="getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">Apakah pernah bercerai hidup sebelumnya (jika status perkawinan: kawin, cerai hidup, cerai mati)<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_bercerai_hidup_s_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_bercerai_hidup_s_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jika_pernah_mengalam_alasannya_Tuliskan" data-relevant="getFieldValue(\'Apakah_pernah_bercerai_hidup_s\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Jika pernah mengalami cerai hidup apakah alasannya (Tuliskan)?<span class="required">*</span></label>';
+  html += '<input type="text" name="Jika_pernah_mengalam_alasannya_Tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_memiliki_akta_lahir_us" data-relevant="getFieldValue(\'umur\') <= 17">';
+  html += '<label class="question-label" style="font-size:14px;">DKT04. Apakah memiliki akta lahir (usia 0-17 tahun)<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_memiliki_akta_lahir_us_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_memiliki_akta_lahir_us_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKT05_Jika_tidak_me_alasannya_Tuliskan" data-relevant="getFieldValue(\'Apakah_memiliki_akta_lahir_us\') === \'2__tidak\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT05. Jika tidak memilik apakah alasannya (Tuliskan)?<span class="required">*</span></label>';
+  html += '<input type="text" name="DKT05_Jika_tidak_me_alasannya_Tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_memiliki_kartu_jaminan_">';
+  html += '<label class="question-label" style="font-size:14px;">DKT06. Apakah memiliki kartu jaminan kesehatan<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_memiliki_kartu_jaminan__' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_memiliki_kartu_jaminan__' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKT07_Jika_ya_pembiayaan_jami" data-relevant="getFieldValue(\'Apakah_memiliki_kartu_jaminan_\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT07. Jika ya pembiayaan jaminan kesehatan dari mana?<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKT07_Jika_ya_pembiayaan_jami_' + idx + '" value="1__gratis_dari_pemerintah" required> 1. Gratis dari pemerintah</label>';
+  html += '<label class="option-item"><input type="radio" name="DKT07_Jika_ya_pembiayaan_jami_' + idx + '" value="2__bayar_dari_kantor" required> 2. Bayar dari kantor</label>';
+  html += '<label class="option-item"><input type="radio" name="DKT07_Jika_ya_pembiayaan_jami_' + idx + '" value="3__bayar_mandiri_sebesar" required> 3. Bayar mandiri sebesar...</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="bayar_sebesar_perbulan_" data-relevant="getFieldValue(\'DKT07_Jika_ya_pembiayaan_jami\') === \'3__bayar_mandiri_sebesar\'">';
+  html += '<label class="question-label" style="font-size:14px;">bayar sebesar perbulan ..........<span class="required">*</span></label>';
+  html += '<input type="number" name="bayar_sebesar_perbulan__' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKT08_Jika_tidak_me_alasannya_Tuliskan" data-relevant="getFieldValue(\'Apakah_memiliki_kartu_jaminan_\') === \'2__tidak\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT08. Jika tidak memilik apakah alasannya (Tuliskan)?<span class="required">*</span></label>';
+  html += '<input type="text" name="DKT08_Jika_tidak_me_alasannya_Tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKT09_Menurut_anda_apakah_kar">';
+  html += '<label class="question-label" style="font-size:14px;">DKT09. Menurut anda apakah kartu jaminan kesehatan itu penting?<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKT09_Menurut_anda_apakah_kar_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKT09_Menurut_anda_apakah_kar_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKT10_Jika_ya_beri_alasan_nya" data-relevant="getFieldValue(\'DKT09_Menurut_anda_apakah_kar\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT10. Jika ya beri alasan nya<span class="required">*</span></label>';
+  html += '<input type="text" name="DKT10_Jika_ya_beri_alasan_nya_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKT10_Jika_tidak_beri_Alasannya" data-relevant="getFieldValue(\'DKT09_Menurut_anda_apakah_kar\') === \'2__tidak\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT10. Jika tidak beri Alasannya?<span class="required">*</span></label>';
+  html += '<input type="text" name="DKT10_Jika_tidak_beri_Alasannya_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Partisipasi_sekolah_penduduk_" data-relevant="getFieldValue(\'umur\') > 4">';
+  html += '<label class="question-label" style="font-size:14px;">Partisipasi sekolah (penduduk lima tahun keatas)<span class="required">*</span></label>';
+  html += '<div class="hint-text">(TK sederajat termasuk belum bersekolah)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Partisipasi_sekolah_penduduk__' + idx + '" value="1__tidak_belum_pernah_sekolah" required> 1. Tidak/belum pernah sekolah</label>';
+  html += '<label class="option-item"><input type="radio" name="Partisipasi_sekolah_penduduk__' + idx + '" value="2__masih_sekolah" required> 2. Masih sekolah</label>';
+  html += '<label class="option-item"><input type="radio" name="Partisipasi_sekolah_penduduk__' + idx + '" value="3__tidak_bersekolah_lagi" required> 3. Tidak bersekolah lagi</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jenjang_pendidikan_y_dang_pernah_diduduki" data-relevant="getFieldValue(\'Partisipasi_sekolah_penduduk_\') !== \'1__tidak_belum_pernah_sekolah\' && getFieldValue(\'umur\') > 4">';
+  html += '<label class="question-label" style="font-size:14px;">Jenjang pendidikan yang sedang/pernah diduduki<span class="required">*</span></label>';
+  html += '<select name="Jenjang_pendidikan_y_dang_pernah_diduduki_' + idx + '" class="form-control" required>';
+  html += '<option value="">Select one</option>';
+  html += '<option value="1__sd_sederajat">1. SD sederajat</option>';
+  html += '<option value="2__smp_sederajat">2. SMP sederajat</option>';
+  html += '<option value="3__smu_sederajat">3. SMU sederajat</option>';
+  html += '<option value="di_plus">4. Diploma I</option>';
+  html += '<option value="5__diploma_ii">5. Diploma II</option>';
+  html += '<option value="6__diploma_iii">6. Diploma III</option>';
+  html += '<option value="7__diploma_iv_s1">7. Diploma IV/S1</option>';
+  html += '<option value="8__s2_s3">8. S2/S3</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Tingkat_kelas_yang_s_dang_pernah_diduduki" data-relevant="getFieldValue(\'Partisipasi_sekolah_penduduk_\') !== \'1__tidak_belum_pernah_sekolah\' && getFieldValue(\'umur\') > 4">';
+  html += '<label class="question-label" style="font-size:14px;">Tingkat kelas yang sedang/pernah diduduki<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Tingkat_kelas_yang_s_dang_pernah_diduduki_' + idx + '" value="1__1_6" required> 1. 1-6</label>';
+  html += '<label class="option-item"><input type="radio" name="Tingkat_kelas_yang_s_dang_pernah_diduduki_' + idx + '" value="2__tamat" required> 2. Tamat</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Ijazah_yang_dimiliki_5_tahun_keatas" data-relevant="getFieldValue(\'umur\') > 4 && getFieldValue(\'Partisipasi_sekolah_penduduk_\') !== \'1__tidak_belum_pernah_sekolah\'">';
+  html += '<label class="question-label" style="font-size:14px;">Ijazah yang dimiliki (5 tahun keatas)<span class="required">*</span></label>';
+  html += '<select name="Ijazah_yang_dimiliki_5_tahun_keatas_' + idx + '" class="form-control" required>';
+  html += '<option value="">Select one</option>';
+  html += '<option value="1_tidak_belum_pernah_sekolah">1.Tidak/belum pernah sekolah</option>';
+  html += '<option value="2_tidak_tamat_sd_sederajat">2.Tidak Tamat SD/Sederajat</option>';
+  html += '<option value="3_sd_sederajat">3.SD/Sederajat</option>';
+  html += '<option value="4_sltp_sederajat">4.SMP/Sederajat</option>';
+  html += '<option value="5_slta_sederajat">5.SMU/Sederajat</option>';
+  html += '<option value="6_diploma_i">6.Diploma I</option>';
+  html += '<option value="7_diploma_ii">7.Diploma II</option>';
+  html += '<option value="8_diploma_iii">8.Diploma III</option>';
+  html += '<option value="9_diploma_iv_s1">9.Diploma IV/S1</option>';
+  html += '<option value="10_s2_s3">10.S2/S3</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR09_Usia_Perkawina_sudah_pernah_menikah" data-relevant="getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR09. Usia Perkawinan Pertama (Bila sudah pernah menikah)<span class="required">*</span></label>';
+  html += '<input type="number" name="IR09_Usia_Perkawina_sudah_pernah_menikah_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_pernah_melahirkan" data-relevant="getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\' && getFieldValue(\'Jenis_Kelamin\') === \'perempuan\'">';
+  html += '<label class="question-label" style="font-size:14px;">Apakah pernah melahirkan<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_melahirkan_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_melahirkan_' + idx + '" value="0__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR11_Usia_Pertama_K_ikah_15_Tahun_Keatas" data-relevant="getFieldValue(\'Apakah_pernah_melahirkan\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR11. Usia Pertama Kali Melahirkan (Wanita Pernah Menikah 15 Tahun Keatas)<span class="required">*</span></label>';
+  html += '<input type="number" name="IR11_Usia_Pertama_K_ikah_15_Tahun_Keatas_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR12_Jumlah_Anak_La_ikah_15_Tahun_Keatas" data-relevant="getFieldValue(\'Jenis_Kelamin\') === \'perempuan\' && getFieldValue(\'umur\') > 14 && getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\' && getFieldValue(\'Apakah_pernah_melahirkan\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR12. Jumlah Anak Lahir Hidup (Wanita Pernah Menikah 15 Tahun Keatas)<span class="required">*</span></label>';
+  html += '<input type="number" name="IR12_Jumlah_Anak_La_ikah_15_Tahun_Keatas_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR13_Jumlah_Anak_Me_ikah_15_Tahun_Keatas" data-relevant="getFieldValue(\'Jenis_Kelamin\') === \'perempuan\' && getFieldValue(\'umur\') > 14 && getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\' && getFieldValue(\'Apakah_pernah_melahirkan\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR13. Jumlah Anak Meninggal (Wanita Pernah Menikah 15 Tahun Keatas)<span class="required">*</span></label>';
+  html += '<input type="number" name="IR13_Jumlah_Anak_Me_ikah_15_Tahun_Keatas_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR14_Jumlah_Anak_Ma_ikah_15_Tahun_Keatas" data-relevant="getFieldValue(\'Jenis_Kelamin\') === \'perempuan\' && getFieldValue(\'umur\') > 14 && getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\' && getFieldValue(\'Apakah_pernah_melahirkan\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR14. Jumlah Anak Masih Hidup (Wanita Pernah Menikah 15 Tahun Keatas)<span class="required">*</span></label>';
+  html += '<input type="number" name="IR14_Jumlah_Anak_Ma_ikah_15_Tahun_Keatas_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR15_Jumlah_Anak_Ideal_yang_Diinginkan" data-relevant="getFieldValue(\'umur\') > 14 && getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR15. Jumlah Anak Ideal yang Diinginkan<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Penduduk 15 Tahun Keatas yang pernah menikah)</div>';
+  html += '<input type="number" name="IR15_Jumlah_Anak_Ideal_yang_Diinginkan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR17_Alasan_utama_m_yang_ideal_tersebut" data-relevant="getFieldValue(\'umur\') > 14 && getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR17. Alasan utama memiliki jumlah anak yang ideal tersebut?<span class="required">*</span></label>';
+  html += '<div class="hint-text">( (Penduduk 15 Tahun Keatas yang pernah menikah))</div>';
+  html += '<select name="IR17_Alasan_utama_m_yang_ideal_tersebut_' + idx + '" class="form-control" required>';
+  html += '<option value="">Select one</option>';
+  html += '<option value="1__kemampuan_finansial">1. Kemampuan finansial</option>';
+  html += '<option value="2__keberlangsungan_karir">2. Keberlangsungan karir</option>';
+  html += '<option value="3__kesiapan_mental">3. Kesiapan mental</option>';
+  html += '<option value="4__kesehatan_fisik_ibu">4. Kesehatan fisik ibu</option>';
+  html += '<option value="usia">5. Usia</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR18_Tujuan_memiliki_anak_menurut_anda" data-relevant="getFieldValue(\'umur\') > 14 && getFieldValue(\'statusperkawinan\') !== \'1_belum_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR18. Tujuan memiliki anak menurut anda<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="IR18_Tujuan_memiliki_anak_menurut_anda_' + idx + '" value="1__merawat_di_hari_tua" required> 1. Merawat di hari tua</label>';
+  html += '<label class="option-item"><input type="radio" name="IR18_Tujuan_memiliki_anak_menurut_anda_' + idx + '" value="2__suatu_saat_membantu_ekonomi_keluarga" required> 2. Suatu saat membantu ekonomi keluarga</label>';
+  html += '<label class="option-item"><input type="radio" name="IR18_Tujuan_memiliki_anak_menurut_anda_' + idx + '" value="3__ada_penerus_keluarga_pewaris" required> 3. Ada penerus keluarga/pewaris</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_menggunakan_kontrasepsi" data-relevant="getFieldValue(\'Jenis_Kelamin\') === \'perempuan\' && getFieldValue(\'umur\') > 14 && getFieldValue(\'statusperkawinan\') === \'2_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR19. Apakah menggunakan kontrasepsi<span class="required">*</span></label>';
+  html += '<div class="hint-text">((wanita kawin usia 15 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_menggunakan_kontrasepsi_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_menggunakan_kontrasepsi_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jika_ya_maka_sebutkan_alat_KB_nya" data-relevant="getFieldValue(\'Apakah_menggunakan_kontrasepsi\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Jika ya maka sebutkan alat KB nya<span class="required">*</span></label>';
+  html += '<select name="Jika_ya_maka_sebutkan_alat_KB_nya_' + idx + '" class="form-control" required>';
+  html += '<option value="">Select one</option>';
+  html += '<option value="1__pil">1. Pil</option>';
+  html += '<option value="2__suntik">2. Suntik</option>';
+  html += '<option value="3__iud">3. IUD</option>';
+  html += '<option value="4__kondom">4. Kondom</option>';
+  html += '<option value="5__vasketomi_tubektomi">5. Vasketomi/tubektomi</option>';
+  html += '<option value="6__lainnya">6. Lainnya</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="IR20_Alasan_tidak_memakai_kontrasepsi" data-relevant="getFieldValue(\'Apakah_menggunakan_kontrasepsi\') === \'2__tidak\'">';
+  html += '<label class="question-label" style="font-size:14px;">IR20. Alasan tidak memakai kontrasepsi?<span class="required">*</span></label>';
+  html += '<select name="IR20_Alasan_tidak_memakai_kontrasepsi_' + idx + '" class="form-control" required>';
+  html += '<option value="">Select one</option>';
+  html += '<option value="1__ingin_hamil_anak">1. ingin hamil/anak</option>';
+  html += '<option value="2">2. tidak tahu tentang kb</option>';
+  html += '<option value="3__alasan_kesehatan">3. alasan kesehatan</option>';
+  html += '<option value="4__efek_samping">4. efek samping</option>';
+  html += '<option value="5__tempat_pelayanan_jauh">5. tempat pelayanan jauh</option>';
+  html += '<option value="6__alat_obat_kb_tidak_tersedia">6. alat/obat kb tidak tersedia</option>';
+  html += '<option value="7__biaya_mahal">7. biaya mahal</option>';
+  html += '<option value="8__tidak_ada_alat_obat_yg_cocok">8. tidak ada alat/obat yg cocok</option>';
+  html += '<option value="9__suami_menolak">9. suami menolak</option>';
+  html += '<option value="10__alasan_agama">10. alasan agama</option>';
+  html += '<option value="11__tidak_ada_petugas_kb">11. tidak ada petugas kb</option>';
+  html += '<option value="12_baru_melahirkan">12 baru melahirkan</option>';
+  html += '<option value="13__6_bulan_terakhir_tidak_melakukan_hub">13. 6 bulan terakhir tidak melakukan hubungan suami istri</option>';
+  html += '<option value="14__6_bulan_tidak_menstruasi">14. 6 bulan tidak menstruasi</option>';
+  html += '<option value="15__tidak_subur_mandul">15. tidak subur/mandul</option>';
+  html += '<option value="16__manopause">16. manopause</option>';
+  html += '<option value="17__lainnya">17. lainnya</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_nama_mengal_nak_24_bulan_kebawah" data-relevant="getFieldValue(\'umur\') <= 1">';
+  html += '<label class="question-label" style="font-size:14px;">Apakah (nama) mengalami stunting (anak 24 bulan kebawah)<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_nama_mengal_nak_24_bulan_kebawah_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_nama_mengal_nak_24_bulan_kebawah_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_dalam_enam_bu_usia_5_tahun_keatas" data-relevant="getFieldValue(\'umur\') > 4">';
+  html += '<label class="question-label" style="font-size:14px;">Apakah dalam enam bulan terakhir mengakses media online/internet (penduduk usia 5 tahun keatas)<span class="required">*</span></label>';
+  html += '<div class="hint-text">(termasuk menggunakan perangkat orang lain)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_dalam_enam_bu_usia_5_tahun_keatas_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_dalam_enam_bu_usia_5_tahun_keatas_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Dalam_satu_bulan_ter_ninggalkan_aktifitas">';
+  html += '<label class="question-label" style="font-size:14px;">Dalam satu bulan terakhir mengalami sakit (empat hari berturut-turut) sehingga meninggalkan aktifitas<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Dalam_satu_bulan_ter_ninggalkan_aktifitas_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Dalam_satu_bulan_ter_ninggalkan_aktifitas_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_mengalami_disabilitas">';
+  html += '<label class="question-label" style="font-size:14px;">Apakah mengalami disabilitas<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_mengalami_disabilitas_' + idx + '" value="1__ya" required> 1. Tidak mengalami disabilitas</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_mengalami_disabilitas_' + idx + '" value="2__tidak" required> 2. Disabilitas Ringan</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_mengalami_disabilitas_' + idx + '" value="3__sedang" required> 3. Disabilitas Sedang</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_mengalami_disabilitas_' + idx + '" value="4__berat" required> 4. Disabilitas Berat</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_bekerja_berusaha_minima" data-relevant="getFieldValue(\'umur\') > 14">';
+  html += '<label class="question-label" style="font-size:14px;">Apakah bekerja/berusaha minimal satu jam kumulatif selama seminggu terakhir atau sementara tidak bekerja (Penduduk 15 Tahun Keatas)<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Bermaksud mendapatkan penghasilan/membantu mendapatkan penghasilan)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_bekerja_berusaha_minima_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_bekerja_berusaha_minima_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Pekerjaan_Usaha" data-relevant="getFieldValue(\'Apakah_bekerja_berusaha_minima\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Pekerjaan/Usaha Utama<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Bila ada lebih dari satu pekerjaan maka pekerjaan utama adalah yang menggunakan waktu terbanyak), pekerjaan yang biasanya kalau sementara tidak bekerja)</div>';
+  html += '<select name="Pekerjaan_Usaha_' + idx + '" class="form-control" required>';
+  html += '<option value="">Select one</option>';
+  html += '<option value="1__petani">1. Petani</option>';
+  html += '<option value="2__nelayan">2. Nelayan</option>';
+  html += '<option value="3__pedagang">3. Pedagang</option>';
+  html += '<option value="4__pejabat_negara">4. Pejabat Negara</option>';
+  html += '<option value="5__pns_tni_polri">5. PNS/TNI/Polri</option>';
+  html += '<option value="6__swasta_sektor_pertanian">6. Swasta Sektor Pertanian</option>';
+  html += '<option value="7__swasta_sektor_industri">7. Swasta Sektor Industri</option>';
+  html += '<option value="8__swasta_sektor_jasa">8. Swasta Sektor Jasa</option>';
+  html += '<option value="10__pekerja_lepas">10. Pekerja Lepas</option>';
+  html += '<option value="11__pekerjaan_lainnya__tuliskan">11. Pekerjaan Lainnya (Tuliskan)</option>';
+  html += '</select>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Tuliskan_Isian_Pekerjaan_Lainnya" data-relevant="getFieldValue(\'Pekerjaan_Usaha\') === \'11__pekerjaan_lainnya__tuliskan\'">';
+  html += '<label class="question-label" style="font-size:14px;">Tuliskan Isian Pekerjaan Lainnya<span class="required">*</span></label>';
+  html += '<input type="text" name="Tuliskan_Isian_Pekerjaan_Lainnya_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Upah_Pendapatan_yang_lan_uang_dan_barang" data-relevant="getFieldValue(\'Apakah_bekerja_berusaha_minima\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Upah/Pendapatan yang diperoleh biasanya dalam sebulan (uang dan barang)<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Upah_Pendapatan_yang_lan_uang_dan_barang_' + idx + '" value="1__kurang_dari_satu_juta" required> 1. Kurang dari satu juta</label>';
+  html += '<label class="option-item"><input type="radio" name="Upah_Pendapatan_yang_lan_uang_dan_barang_' + idx + '" value="2__satu_juta_sampai_dua_juta" required> 2. Satu juta sampai dua juta</label>';
+  html += '<label class="option-item"><input type="radio" name="Upah_Pendapatan_yang_lan_uang_dan_barang_' + idx + '" value="3__lebih_dari_dua_juta_sampai_tiga_juta" required> 3. Lebih dari dua juta sampai tiga juta</label>';
+  html += '<label class="option-item"><input type="radio" name="Upah_Pendapatan_yang_lan_uang_dan_barang_' + idx + '" value="4__lebih_dari_3_juta" required> 4. Lebih dari 3 juta</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Tuliskan" data-relevant="getFieldValue(\'Apakah_bekerja_berusaha_minima\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Tuliskan<span class="required">*</span></label>';
+  html += '<input type="number" name="Tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_menerima_tranfer_atau_p">';
+  html += '<label class="question-label" style="font-size:14px;">Apakah menerima tranfer atau pemberian<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_menerima_tranfer_atau_p_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_menerima_tranfer_atau_p_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jumlah_tranfer_pemberian_yang_diterima" data-relevant="getFieldValue(\'Apakah_menerima_tranfer_atau_p\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Jumlah tranfer/pemberian yang diterima<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Jumlah_tranfer_pemberian_yang_diterima_' + idx + '" value="1__kurang_dari_satu_juta" required> 1. Kurang dari satu juta</label>';
+  html += '<label class="option-item"><input type="radio" name="Jumlah_tranfer_pemberian_yang_diterima_' + idx + '" value="2__satu_juta_sampai_dua_juta" required> 2. Satu juta sampai dua juta</label>';
+  html += '<label class="option-item"><input type="radio" name="Jumlah_tranfer_pemberian_yang_diterima_' + idx + '" value="3__lebih_dari_dua_juta_sampai_tiga_juta" required> 3. Lebih dari dua juta sampai tiga juta</label>';
+  html += '<label class="option-item"><input type="radio" name="Jumlah_tranfer_pemberian_yang_diterima_' + idx + '" value="4__lebih_dari_3_juta" required> 4. Lebih dari 3 juta</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="tuliskan_001" data-relevant="getFieldValue(\'Apakah_menerima_tranfer_atau_p\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">tuliskan<span class="required">*</span></label>';
+  html += '<input type="number" name="tuliskan_001_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Selama_enam_bulan_te_ut_10_tahun_ke_atas" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">Selama enam bulan terakhir apakah menjalankan ibadah dengan secara rutin sesuai dengan tuntunan agama dan kepercayaan yang dianut (10 tahun ke atas)<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Selama_enam_bulan_te_ut_10_tahun_ke_atas_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Selama_enam_bulan_te_ut_10_tahun_ke_atas_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_pernah_tanpa_tegur_sapa">';
+  html += '<label class="question-label" style="font-size:14px;">DKT12. Apakah pernah tanpa tegur sapa (karena konflik) selama tiga hari berturut-turut dalam enam enam bulan terakhir?<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_tanpa_tegur_sapa_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_tanpa_tegur_sapa_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jika_pernah_tanpa_te_apa_sebab_alasannya" data-relevant="getFieldValue(\'Apakah_pernah_tanpa_tegur_sapa\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Jika pernah tanpa tegur sapa, sebab alasannya?<span class="required">*</span></label>';
+  html += '<input type="text" name="Jika_pernah_tanpa_te_apa_sebab_alasannya_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_pernah_mengalami_kekera">';
+  html += '<label class="question-label" style="font-size:14px;">DKT18. Apakah pernah mengalami kekerasan dalam rumah tangga dalam enam bulan terakhir?<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_mengalami_kekera_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_mengalami_kekera_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jika_ya_pernah_menga_alasannya_Tuliskan" data-relevant="getFieldValue(\'Apakah_pernah_mengalami_kekera\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Jika ya pernah mengalami kekerasan maka beri alasannya? (Tuliskan)<span class="required">*</span></label>';
+  html += '<input type="text" name="Jika_ya_pernah_menga_alasannya_Tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Apakah_pernah_minggat_dari_rum">';
+  html += '<label class="question-label" style="font-size:14px;">DKT16. Apakah pernah pergi/minggat dari rumah (karena konflik) selama dua hari berturut-turut dalam enam bulan terakhir?<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_minggat_dari_rum_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Apakah_pernah_minggat_dari_rum_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jika_ya_pernah_mingg_alasannya_tuliskan" data-relevant="getFieldValue(\'Apakah_pernah_minggat_dari_rum\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Jika ya pernah minggat maka berikan alasannya? (tuliskan)<span class="required">*</span></label>';
+  html += '<input type="text" name="Jika_ya_pernah_mingg_alasannya_tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Pisah_ranjang_antara_suami_dan" data-relevant="getFieldValue(\'statusperkawinan\') === \'2_kawin\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKT14. Pisah ranjang (karena konflik) antara suami dan istri selama tujuh hari berturut-turut (bagi yang status kawin)<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="Pisah_ranjang_antara_suami_dan_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="Pisah_ranjang_antara_suami_dan_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Jika_ya_pisah_ranjan_alasannya_tuliskan" data-relevant="getFieldValue(\'Pisah_ranjang_antara_suami_dan\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">Jika ya pisah ranjang, sebab alasannya? (tuliskan)<span class="required">*</span></label>';
+  html += '<input type="text" name="Jika_ya_pisah_ranjan_alasannya_tuliskan_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKM02_Apakah_dalam_ikit_dua_kali_sehari">';
+  html += '<label class="question-label" style="font-size:14px;">DKM02. Apakah dalam enam bulan terakhir makan "makanan beragam" (makanan pokok, sayur/buah, lauk) paling sedikit dua kali sehari?<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKM02_Apakah_dalam_ikit_dua_kali_sehari_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKM02_Apakah_dalam_ikit_dua_kali_sehari_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK01_Selama_enam_b_ang_lain_setiap_hari">';
+  html += '<label class="question-label" style="font-size:14px;">DKK01. Selama enam bulan terakhir apakah memiliki waktu untuk berinteraksi (termasuk secara online) dengan anggota keluarga yang lain setiap hari?<span class="required">*</span></label>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK01_Selama_enam_b_ang_lain_setiap_hari_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK01_Selama_enam_b_ang_lain_setiap_hari_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK02_Berapa_jam_wak_angga_dalam_seminggu" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK02.Berapa jam waktu yang anda gunakan untuk bekerja, sekolah, mengurus rumah tangga dalam seminggu?<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Usia 10 tahun keatas)</div>';
+  html += '<input type="number" name="DKK02_Berapa_jam_wak_angga_dalam_seminggu_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK04_Apakah_nonton_am_seminggu_terakhir" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK04. Apakah nonton televisi (termasuk secara online) dalam seminggu terakhir?<span class="required">*</span></label>';
+  html += '<div class="hint-text">(usia 10 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK04_Apakah_nonton_am_seminggu_terakhir_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK04_Apakah_nonton_am_seminggu_terakhir_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK05_Apakah_memba_am_seminggu_terakhir" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK05. Apakah  membaca koran/majalah/buku/sejenisnya (termasuk secara online) dalam seminggu terakhir?<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Usia 10 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK05_Apakah_memba_am_seminggu_terakhir_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK05_Apakah_memba_am_seminggu_terakhir_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK06_Apakah_berola_am_seminggu_terakhir" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK06. Apakah berolahraga dalam seminggu terakhir?<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Usia 10 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK06_Apakah_berola_am_seminggu_terakhir_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK06_Apakah_berola_am_seminggu_terakhir_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK07_Apakah_bersos_am_seminggu_terakhir" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK07. Apakah bersosialisasi dengan tetangga dalam seminggu terakhir?<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Usia 10 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK07_Apakah_bersos_am_seminggu_terakhir_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK07_Apakah_bersos_am_seminggu_terakhir_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK08_Apakah_melaku_am_seminggu_terakhir" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK08. Apakah melakukan rekreasi/mengerjakan hobi atau sejeninya dalam seminggu terakhir?<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Usia 10 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK08_Apakah_melaku_am_seminggu_terakhir_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK08_Apakah_melaku_am_seminggu_terakhir_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK09_Dari_seluruh_ing_banyak_dilakukan" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK09. Dari seluruh kegiatan tersebut bersama siapa paling banyak dilakukan?<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Usia 10 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK09_Dari_seluruh_ing_banyak_dilakukan_' + idx + '" value="1__sendiri" required> 1. Sendiri</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK09_Dari_seluruh_ing_banyak_dilakukan_' + idx + '" value="2__bersama_keluarga" required> 2. Bersama keluarga</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK09_Dari_seluruh_ing_banyak_dilakukan_' + idx + '" value="3__bersama_selain_keluarga" required> 3. Bersama selain keluarga</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK12_Selama_enam_bulan_terak" data-relevant="getFieldValue(\'umur\') > 9">';
+  html += '<label class="question-label" style="font-size:14px;">DKK13. Selama enam bulan terakhir apakah ikut serta dalam kegiatan sosial/gotong royong di lingkungan RT<span class="required">*</span></label>';
+  html += '<div class="hint-text">(Usia 10 tahun keatas)</div>';
+  html += '<div class="option-list">';
+  html += '<label class="option-item"><input type="radio" name="DKK12_Selama_enam_bulan_terak_' + idx + '" value="1__ya" required> 1. Ya</label>';
+  html += '<label class="option-item"><input type="radio" name="DKK12_Selama_enam_bulan_terak_' + idx + '" value="2__tidak" required> 0. Tidak</label>';
+  html += '</div>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="DKK14_Jika_ya_sebu_tong_royong_tersebut" data-relevant="getFieldValue(\'DKK12_Selama_enam_bulan_terak\') === \'1__ya\'">';
+  html += '<label class="question-label" style="font-size:14px;">DKK14. Jika ya, sebutkan kegiatan gotong royong tersebut?<span class="required">*</span></label>';
+  html += '<input type="text" name="DKK14_Jika_ya_sebu_tong_royong_tersebut_' + idx + '" class="form-control" required>';
+  html += '</div>';
+
+  html += '<div class="question" style="margin-bottom:18px;" data-repeat-idx="' + idx + '" data-name="Nomor_urut_pemberi_jawaban">';
+  html += '<label class="question-label" style="font-size:14px;">Nomor urut pemberi jawaban?<span class="required">*</span></label>';
+  html += '<input type="number" name="Nomor_urut_pemberi_jawaban_' + idx + '" class="form-control" max="${Berapa_Jumlah_Anggot_an_Makan_Dirumah_Ini}" required>';
+  html += '</div>';
+
+  item.innerHTML = html;
+  container.appendChild(item);
+
+  item.querySelectorAll('input, select').forEach(function(el) {
+    el.addEventListener('change', evaluateRepeatRelevance);
+    el.addEventListener('input', evaluateRepeatRelevance);
+  });
+
+  item.querySelectorAll('.option-item').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      var group = this.closest('.option-list');
+      if (group) {
+        group.querySelectorAll('.option-item').forEach(function(o) { o.classList.remove('selected'); });
+        this.classList.add('selected');
+        this.querySelector('input').checked = true;
+        evaluateRepeatRelevance();
+      }
+    });
+  });
+
+  evaluateRepeatRelevance();
+}
+
+function removeRepeatItem(idx) {
+  var item = document.getElementById('repeat_' + idx);
+  if (item) item.remove();
+}
+
+function evaluateRepeatRelevance() {
+  document.querySelectorAll('.repeat-item .question[data-relevant]').forEach(function(group) {
+    var expr = group.getAttribute('data-relevant');
+    if (!expr) return;
+    var idx = group.getAttribute('data-repeat-idx');
+    try {
+      var getVal = function(name) {
+        var el = document.querySelector('[name="' + name + '_' + idx + '"]');
+        if (el) return el.value;
+        return getFieldValue(name);
+      };
+      var result = new Function('getFieldValue', 'return (' + expr + ');')(getVal);
+      if (result) {
+        group.classList.remove('hidden');
+        group.querySelectorAll('input, select, textarea').forEach(function(el) { el.disabled = false; });
+      } else {
+        group.classList.add('hidden');
+        group.querySelectorAll('input, select, textarea').forEach(function(el) { el.disabled = true; });
+      }
+    } catch(e) { console.warn('Repeat relevance error:', e.message); }
+  });
+}
+
+function prefillData(data) {
+  Object.entries(data).forEach(function(entry) {
+    setFieldValue(entry[0], entry[1]);
+  });
+  evaluateAllRelevance();
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  attachChangeListeners();
+  evaluateAllRelevance();
+  updateProgress();
+  loadEditData();
+});
+</script>
+</body>
+</html>
