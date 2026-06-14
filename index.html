@@ -595,31 +595,37 @@ function ambilDataPetugas(kode, nama) {
       }
 
       document.getElementById('step2').style.display = 'none';
-      document.getElementById('hasil-title').textContent = '✅ Halo ' + nama + '! ' + res.jumlah + ' data ditemukan';
+
+      var sudahEdit = res.data.filter(function(d){ return d.flag_edit == 1; }).length;
+      document.getElementById('hasil-title').textContent =
+        '✅ Halo ' + nama + '! ' + res.jumlah + ' data ditemukan (' + sudahEdit + ' sudah diedit)';
 
       var html = '';
-      res.data.forEach(function(item){
-        var flagLabel = item.flag_edit == 1 ? '<span class="flag-badge flag-1">✓ Sudah diedit</span>' : '<span class="flag-badge flag-0">Belum diedit</span>';
-        
-        // MENGGUNAKAN LINK EDIT DARI DATA (DIPERSIAPKAN DI GOOGLE SCRIPT)
-        // Jika kolom di Google Sheets bernama 'edit_link'
-        var editLink = item.edit_link || '#'; 
-        
-        html += '<div class="hasil-item">';
+      res.data.forEach(function(item, idx){
+        var flagLabel = item.flag_edit == 1
+          ? '<span class="flag-badge flag-1">✓ Sudah diedit</span>'
+            + (item.waktu_edit ? '<span style="font-size:10px;color:#6b7280;margin-left:4px;">' + formatWaktu(item.waktu_edit) + '</span>' : '')
+          : '<span class="flag-badge flag-0">Belum diedit</span>';
+
+        // edit_link dikirim dari Google Apps Script (sudah pakai _uuid)
+        var editLink = (item.edit_link && item.edit_link !== '#') ? item.edit_link : '';
+
+        html += '<div class="hasil-item" id="item-' + idx + '">';
         html += '<div style="flex:1;">';
         html += '<div class="hasil-id">RT <span>' + item.no_rt + '</span> &nbsp;|&nbsp; Resp. <span>' + item.no_responden + '</span></div>';
         html += '<div class="hasil-nama">KK: <span>' + (item.nama_kk || '-') + '</span></div>';
-        html += flagLabel;
+        html += '<div id="flag-' + idx + '">' + flagLabel + '</div>';
         html += '</div>';
-        
-        if (editLink !== '#') {
-          html += '<a href="' + editLink + '" target="_blank" class="hasil-link">';
-          html += '<i class="ti ti-edit"></i> Edit di Kobo</a>';
+
+        if (editLink) {
+          html += '<a href="' + editLink + '" target="_blank" class="hasil-link"'
+            + ' onclick="tandaiSudahEdit(\'' + encodeURIComponent(kode) + '\',\'' + encodeURIComponent(item.no_rt) + '\',\'' + encodeURIComponent(item.no_responden) + '\',' + idx + ')">'
+            + '<i class="ti ti-edit"></i> Edit di Kobo</a>';
         } else {
-          html += '<button class="hasil-link" style="opacity:0.5; cursor:not-allowed;" onclick="alert(\'Link edit tidak tersedia\')">';
-          html += '<i class="ti ti-edit"></i> No Link</button>';
+          html += '<button class="hasil-link" style="opacity:0.4;cursor:not-allowed;" disabled>'
+            + '<i class="ti ti-edit"></i> No Link</button>';
         }
-        
+
         html += '</div>';
       });
 
@@ -632,6 +638,36 @@ function ambilDataPetugas(kode, nama) {
       document.getElementById('err-email').textContent = '❌ Gagal memuat data.';
       document.getElementById('err-email').style.display = 'block';
     });
+}
+
+// Format waktu ISO ke lokal
+function formatWaktu(iso) {
+  try {
+    var d = new Date(iso);
+    return d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' })
+      + ' ' + d.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
+  } catch(e) { return iso; }
+}
+
+// Update flag_edit di sheet setelah tombol edit diklik
+function tandaiSudahEdit(kode, noRt, noResponden, idx) {
+  fetch(WEB_APP_URL
+    + "?action=updateFlagEdit"
+    + "&kode=" + kode
+    + "&no_rt=" + noRt
+    + "&no_responden=" + noResponden)
+  .then(function(r){ return r.json(); })
+  .then(function(res){
+    if (res.status === 'ok' && res.updated > 0) {
+      var flagEl = document.getElementById('flag-' + idx);
+      if (flagEl) {
+        var now = new Date().toISOString();
+        flagEl.innerHTML = '<span class="flag-badge flag-1">✓ Sudah diedit</span>'
+          + '<span style="font-size:10px;color:#6b7280;margin-left:4px;">' + formatWaktu(now) + '</span>';
+      }
+    }
+  })
+  .catch(function(){}); // silent fail — link tetap terbuka meski update gagal
 }
 
 function resetLogin() {
