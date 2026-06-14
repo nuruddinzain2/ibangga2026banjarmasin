@@ -435,14 +435,14 @@
     </a>
   </div>
 
-  <div class="disabled-btn">
+  <a href="#" class="btn" onclick="alert('Hasil analisis sedang diproses')">
     <div class="btn-icon" style="background:#fef3c7;color:#92400e;"><i class="ti ti-chart-bar"></i></div>
     <div class="btn-body">
       <p class="btn-label">Hasil sementara iBangga 2026</p>
       <p class="btn-desc">Indeks total & tiga dimensi</p>
     </div>
-    <span class="soon-badge">Segera</span>
-  </div>
+    <i class="ti ti-arrow-right btn-arr"></i>
+  </a>
 
   <p class="footer">© 2026 Dinas PPKBPM Kota Banjarmasin · iBangga</p>
 </div>
@@ -658,7 +658,7 @@ function ambilDataPetugas(kode, nama) {
         html += '<div class="hasil-nama">KK: <span>' + (item.nama_kk || '-') + '</span></div>';
         html += flagLabel;
         html += '</div>';
-        html += '<button class="hasil-link" onclick="alert(\'Fitur edit detail akan segera hadir\')">';
+        html += '<button class="hasil-link" onclick="editData(\'' + item.id + '\')">';
         html += '<i class="ti ti-edit"></i> Edit</button>';
         html += '</div>';
       });
@@ -672,6 +672,12 @@ function ambilDataPetugas(kode, nama) {
       document.getElementById('err-email').textContent = '❌ Gagal memuat data.';
       document.getElementById('err-email').style.display = 'block';
     });
+}
+
+function editData(id) {
+  // Simpan ID ke localStorage agar bisa dibaca di form_edit.html
+  localStorage.setItem('edit_id', id);
+  window.location.href = 'form_edit.html';
 }
 
 function resetLogin() {
