@@ -36,9 +36,10 @@
     display: flex; align-items: center; justify-content: center;
     margin: 0 auto 1rem;
     cursor: pointer;
-    transition: border-color .2s;
+    transition: border-color .2s, transform .2s;
   }
-  .logo-circle:hover { border-color: #f5c518; }
+  .logo-circle:hover { border-color: #f5c518; transform: scale(1.05); }
+  .logo-circle:active { transform: scale(0.95); }
   .org { font-size: 12px; color: #6b7280; margin-bottom: 3px; }
   .title { font-size: 17px; font-weight: 600; color: #111827; margin-bottom: 6px; }
   .badge {
@@ -120,19 +121,28 @@
     font-size: 14px; font-family: inherit;
     outline: none; margin-bottom: 8px;
     color: #111827; background: #fff;
-    transition: border .15s;
+    transition: border .15s, box-shadow .15s;
   }
-  .edit-panel input:focus { border-color: #3b82f6; }
+  .edit-panel input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.1); }
   .hint { font-size: 12px; color: #6b7280; margin-bottom: 10px; }
 
   .nama-box {
     background: #eff6ff; border: 1px solid #bfdbfe;
     border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;
     display: none;
+    animation: fadeIn .3s ease;
   }
   .nama-box .nama-label { font-size: 11px; color: #3b82f6; font-weight: 600; }
   .nama-box .nama-val { font-size: 15px; font-weight: 600; color: #1e40af; margin-top: 2px; }
   .nama-box .kel-val { font-size: 12px; color: #6b7280; margin-top: 1px; }
+
+  .info-box {
+    background: #fef3c7; border: 1px solid #fcd34d;
+    border-radius: 8px; padding: 10px 12px; margin-bottom: 10px;
+    font-size: 12px; color: #92400e;
+    display: none;
+    animation: fadeIn .3s ease;
+  }
 
   .submit-btn {
     width: 100%; padding: 9px;
@@ -140,26 +150,31 @@
     border: none; border-radius: 8px;
     font-size: 14px; font-weight: 500;
     font-family: inherit; cursor: pointer;
-    transition: background .12s;
+    transition: background .12s, transform .1s;
     margin-bottom: 6px;
+    display: flex; align-items: center; justify-content: center; gap: 6px;
   }
   .submit-btn:hover { background: #163d73; }
-  .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
+  .submit-btn:active { transform: scale(0.98); }
+  .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; transform: none; }
 
   .err-msg {
     font-size: 12px; color: #dc2626; margin-top: 7px;
     display: none; background: #fef2f2;
     padding: 7px 10px; border-radius: 6px;
+    animation: shake .3s ease;
   }
   .loading-msg { font-size: 12px; color: #6b7280; margin-top: 8px; text-align: center; display: none; }
 
-  .hasil-wrap { margin-top: 10px; display: none; }
+  .hasil-wrap { margin-top: 10px; display: none; animation: fadeIn .4s ease; }
   .hasil-title { font-size: 13px; font-weight: 600; color: #065f46; background: #d1fae5; padding: 8px 10px; border-radius: 8px; margin-bottom: 8px; }
   .hasil-item {
     background: #fff; border: 1px solid #e8eaf0; border-radius: 8px;
     padding: 10px 12px; margin-bottom: 7px;
     display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    transition: box-shadow .2s;
   }
+  .hasil-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
   .hasil-id { font-size: 12px; color: #374151; }
   .hasil-id span { font-weight: 600; }
   .hasil-nama { font-size: 11px; color: #6b7280; margin-top: 3px; }
@@ -175,15 +190,17 @@
     padding: 6px 12px; background: #1a4a8a; color: #fff;
     border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: 500;
     white-space: nowrap; flex-shrink: 0;
-    transition: background .12s; cursor: pointer; border: none;
+    transition: background .12s, transform .1s; cursor: pointer; border: none;
     font-family: inherit;
   }
   .hasil-link:hover { background: #163d73; }
+  .hasil-link:active { transform: scale(0.95); }
   .reset-btn {
     margin-top: 8px; width: 100%; padding: 7px;
     background: #f3f4f6; color: #374151;
     border: 1px solid #e5e7eb; border-radius: 8px;
     font-size: 12px; font-family: inherit; cursor: pointer;
+    transition: background .12s;
   }
   .reset-btn:hover { background: #e5e7eb; }
 
@@ -204,6 +221,19 @@
     text-align: center; font-size: 11px; color: #9ca3af;
     margin-top: 2rem;
   }
+
+  /* Spinner */
+  .spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin .6s linear infinite;
+    display: inline-block;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
 
   @media (max-width: 400px) {
     body { padding: 1rem .75rem 2rem; }
@@ -261,7 +291,7 @@
           <div class="nama-val" id="nama-val">—</div>
           <div class="kel-val" id="kel-val">—</div>
         </div>
-        <div id="info-belum-email" class="info-box" style="display:none;">
+        <div id="info-belum-email" class="info-box">
           ⚠️ Email belum terdaftar. Silakan daftarkan email Anda.
         </div>
         <button class="submit-btn" id="btn-cek-kode" onclick="cekKode()">Cek Kode</button>
@@ -288,7 +318,7 @@
       <!-- STEP REGISTRASI -->
       <div id="stepRegistrasi" style="display:none;">
         <div class="nama-box" style="display:block;">
-          <div class="nama-label">Daftarkan Email for</div>
+          <div class="nama-label">Daftarkan Email untuk</div>
           <div class="nama-val" id="regis-nama">—</div>
           <div class="kel-val" id="regis-kel">—</div>
         </div>
@@ -301,7 +331,12 @@
 
       <!-- HASIL LOGIN -->
       <div class="hasil-wrap" id="hasil-wrap">
-        <p class="hasil-title" id="hasil-title"></p>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <p class="hasil-title" id="hasil-title" style="flex:1;margin-bottom:0;"></p>
+          <button onclick="refreshHasil()" style="background:none;border:none;cursor:pointer;color:#065f46;font-size:16px;padding:4px 8px;" title="Refresh data">
+            <i class="ti ti-refresh"></i>
+          </button>
+        </div>
         <div id="hasil-list"></div>
         <button class="reset-btn" onclick="resetLogin()">← Ganti petugas</button>
       </div>
@@ -397,12 +432,23 @@
 
 
 <script>
-var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxfcHq1yuIfgs-qtyVZrW0iHDERnXZ226nWvDEcn5gSvHxD2VHm5m_VGuNKauMIeKPGZg/exec";
+var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxCi8Vvz4_Qo-_q5b_vzzcNP-A1g3Svjh6dVHuVT5-EOmR-bRtVt_o_esPoHcjrv8KrnA/exec";
 
 // State
 var currentKode = "";
 var currentNama = "";
 var currentKelurahan = "";
+
+// Escape HTML untuk mencegah XSS
+function escapeHtml(text) {
+  if (!text) return "";
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
 // Submission count
 function fetchSubmissionCount() {
@@ -421,6 +467,9 @@ function toggleEdit(){
   var open = p.style.display !== 'none';
   p.style.display = open ? 'none' : 'block';
   c.style.transform = open ? '' : 'rotate(180deg)';
+  if (!open) {
+    setTimeout(function(){ document.getElementById('kode-input').focus(); }, 100);
+  }
 }
 function toggleSampel(){
   var p = document.getElementById('sampel-panel');
@@ -443,11 +492,15 @@ function cekKode() {
 
   if (!kode) { errEl.textContent = 'Masukkan kode petugas.'; errEl.style.display = 'block'; return; }
 
-  document.getElementById('btn-cek-kode').disabled = true;
+  var btn = document.getElementById('btn-cek-kode');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Mencari...';
+
   fetch(WEB_APP_URL + "?action=checkKode&kode=" + encodeURIComponent(kode))
     .then(function(r){ return r.json(); })
     .then(function(res){
-      document.getElementById('btn-cek-kode').disabled = false;
+      btn.disabled = false;
+      btn.innerHTML = 'Cek Kode';
       if (res.found) {
         currentKode = kode;
         currentNama = res.nama;
@@ -459,20 +512,21 @@ function cekKode() {
         if (res.email && res.email !== "") {
           // Email sudah ada
           document.getElementById('btn-lanjut').style.display = 'block';
-          document.getElementById('btn-cek-kode').style.display = 'none';
+          btn.style.display = 'none';
         } else {
           // Email BELUM ADA → tampilkan tombol registrasi
           document.getElementById('btn-registrasi').style.display = 'block';
-          document.getElementById('btn-cek-kode').style.display = 'none';
+          btn.style.display = 'none';
           document.getElementById('info-belum-email').style.display = 'block';
         }
       } else {
-        errEl.textContent = '⚠️ ' + res.error;
+        errEl.textContent = '⚠️ ' + (res.error || 'Kode tidak ditemukan.');
         errEl.style.display = 'block';
       }
     })
     .catch(function(){
-      document.getElementById('btn-cek-kode').disabled = false;
+      btn.disabled = false;
+      btn.innerHTML = 'Cek Kode';
       errEl.textContent = '❌ Gagal terhubung. Coba lagi.';
       errEl.style.display = 'block';
     });
@@ -483,7 +537,7 @@ function lanjutKeEmail() {
   document.getElementById('step2').style.display = 'block';
   document.getElementById('nama-val2').textContent = currentNama;
   document.getElementById('kel-val2').textContent = currentKelurahan;
-  document.getElementById('email-input').focus();
+  setTimeout(function(){ document.getElementById('email-input').focus(); }, 100);
 }
 
 function backToStep1() {
@@ -499,6 +553,7 @@ function showRegistrasiForm() {
   document.getElementById('stepRegistrasi').style.display = 'block';
   document.getElementById('regis-nama').textContent = currentNama;
   document.getElementById('regis-kel').textContent = currentKelurahan;
+  setTimeout(function(){ document.getElementById('regis-email').focus(); }, 100);
 }
 
 function backToStep1FromRegis() {
@@ -513,20 +568,21 @@ function daftarkanEmail() {
   var errEl = document.getElementById('err-regis');
   errEl.style.display = 'none';
   
-  if (!email || email.indexOf('@') === -1) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     errEl.textContent = 'Format email tidak valid.';
     errEl.style.display = 'block';
     return;
   }
   
-  document.getElementById('btn-regis-submit').disabled = true;
-  document.getElementById('btn-regis-submit').textContent = '⏳ Menyimpan...';
+  var btn = document.getElementById('btn-regis-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span> Menyimpan...';
   
   fetch(WEB_APP_URL + "?action=saveEmail&kode=" + encodeURIComponent(currentKode) + "&email=" + encodeURIComponent(email))
     .then(function(r){ return r.json(); })
     .then(function(res){
-      document.getElementById('btn-regis-submit').disabled = false;
-      document.getElementById('btn-regis-submit').textContent = '📧 Daftarkan Email';
+      btn.disabled = false;
+      btn.innerHTML = '📧 Daftarkan Email';
       
       if (res.success) {
         alert('✅ Email berhasil didaftarkan!\nSilakan login dengan email Anda.');
@@ -536,13 +592,13 @@ function daftarkanEmail() {
         document.getElementById('kel-val2').textContent = currentKelurahan;
         document.getElementById('email-input').value = email;
       } else {
-        errEl.textContent = '❌ ' + res.error;
+        errEl.textContent = '❌ ' + (res.error || 'Gagal mendaftarkan email.');
         errEl.style.display = 'block';
       }
     })
     .catch(function(){
-      document.getElementById('btn-regis-submit').disabled = false;
-      document.getElementById('btn-regis-submit').textContent = '📧 Daftarkan Email';
+      btn.disabled = false;
+      btn.innerHTML = '📧 Daftarkan Email';
       errEl.textContent = '❌ Gagal terhubung. Coba lagi.';
       errEl.style.display = 'block';
     });
@@ -555,7 +611,7 @@ function doLogin() {
   var loading = document.getElementById('loading-msg');
   errEl.style.display = 'none';
 
-  if (!email || email.indexOf('@') === -1) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     errEl.textContent = 'Format email tidak valid.';
     errEl.style.display = 'block'; return;
   }
@@ -607,18 +663,17 @@ function ambilDataPetugas(kode, nama) {
             + (item.waktu_edit ? '<span style="font-size:10px;color:#6b7280;margin-left:4px;">' + formatWaktu(item.waktu_edit) + '</span>' : '')
           : '<span class="flag-badge flag-0">Belum diedit</span>';
 
-        // edit_link dikirim dari Google Apps Script (sudah pakai _uuid)
         var editLink = (item.edit_link && item.edit_link !== '#') ? item.edit_link : '';
 
         html += '<div class="hasil-item" id="item-' + idx + '">';
         html += '<div style="flex:1;">';
-        html += '<div class="hasil-id">RT <span>' + item.no_rt + '</span> &nbsp;|&nbsp; Resp. <span>' + item.no_responden + '</span></div>';
-        html += '<div class="hasil-nama">KK: <span>' + (item.nama_kk || '-') + '</span></div>';
+        html += '<div class="hasil-id">RT <span>' + escapeHtml(item.no_rt) + '</span> &nbsp;|&nbsp; Resp. <span>' + escapeHtml(item.no_responden) + '</span></div>';
+        html += '<div class="hasil-nama">KK: <span>' + escapeHtml(item.nama_kk) + '</span></div>';
         html += '<div id="flag-' + idx + '">' + flagLabel + '</div>';
         html += '</div>';
 
         if (editLink) {
-          html += '<a href="' + editLink + '" target="_blank" class="hasil-link"'
+          html += '<a href="' + escapeHtml(editLink) + '" target="_blank" class="hasil-link"'
             + ' onclick="tandaiSudahEdit(\'' + encodeURIComponent(kode) + '\',\'' + encodeURIComponent(item.no_rt) + '\',\'' + encodeURIComponent(item.no_responden) + '\',' + idx + ')">'
             + '<i class="ti ti-edit"></i> Edit di Kobo</a>';
         } else {
@@ -640,10 +695,17 @@ function ambilDataPetugas(kode, nama) {
     });
 }
 
+function refreshHasil() {
+  if (currentKode && currentNama) {
+    ambilDataPetugas(currentKode, currentNama);
+  }
+}
+
 // Format waktu ISO ke lokal
 function formatWaktu(iso) {
   try {
     var d = new Date(iso);
+    if (isNaN(d.getTime())) return iso;
     return d.toLocaleDateString('id-ID', { day:'2-digit', month:'short', year:'numeric' })
       + ' ' + d.toLocaleTimeString('id-ID', { hour:'2-digit', minute:'2-digit' });
   } catch(e) { return iso; }
@@ -682,6 +744,7 @@ function resetLogin() {
   document.getElementById('btn-registrasi').style.display = 'none';
   document.getElementById('btn-cek-kode').style.display = 'block';
   document.getElementById('btn-cek-kode').disabled = false;
+  document.getElementById('btn-cek-kode').innerHTML = 'Cek Kode';
   document.getElementById('err-kode').style.display = 'none';
   document.getElementById('err-email').style.display = 'none';
   document.getElementById('info-belum-email').style.display = 'none';
