@@ -432,6 +432,7 @@
 
 
 <script>
+// ✅ URL WEB APP YANG BENAR (dari file Code.gs Anda)
 var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxCi8Vvz4_Qo-_q5b_vzzcNP-A1g3Svjh6dVHuVT5-EOmR-bRtVt_o_esPoHcjrv8KrnA/exec";
 
 // State
@@ -510,11 +511,9 @@ function cekKode() {
         namaBox.style.display = 'block';
         
         if (res.email && res.email !== "") {
-          // Email sudah ada
           document.getElementById('btn-lanjut').style.display = 'block';
           btn.style.display = 'none';
         } else {
-          // Email BELUM ADA → tampilkan tombol registrasi
           document.getElementById('btn-registrasi').style.display = 'block';
           btn.style.display = 'none';
           document.getElementById('info-belum-email').style.display = 'block';
