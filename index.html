@@ -217,6 +217,12 @@
     padding: 2px 9px; border-radius: 99px; white-space: nowrap;
   }
 
+  .disabled-link {
+    opacity: 0.4;
+    cursor: not-allowed !important;
+    pointer-events: none;
+  }
+
   .footer {
     text-align: center; font-size: 11px; color: #9ca3af;
     margin-top: 2rem;
@@ -269,7 +275,6 @@
     <i class="ti ti-arrow-right btn-arr"></i>
   </a>
 
-  <!-- EDIT DATA PANEL -->
   <div class="card">
     <button class="btn" onclick="toggleEdit()">
       <div class="btn-icon" style="background:#dcfce7;color:#166534;"><i class="ti ti-edit"></i></div>
@@ -282,7 +287,6 @@
 
     <div id="edit-panel" style="display:none;" class="edit-panel">
 
-      <!-- STEP 1: INPUT KODE -->
       <div id="step1">
         <p class="hint">Masukkan kode petugas Anda.</p>
         <input type="number" id="kode-input" placeholder="Contoh: 51" min="1"/>
@@ -300,7 +304,6 @@
         <p class="err-msg" id="err-kode"></p>
       </div>
 
-      <!-- STEP 2: INPUT EMAIL -->
       <div id="step2" style="display:none;">
         <div class="nama-box" style="display:block;" id="nama-box2">
           <div class="nama-label">Login sebagai</div>
@@ -315,7 +318,6 @@
         <p class="loading-msg" id="loading-msg">⏳ Memuat data...</p>
       </div>
 
-      <!-- STEP REGISTRASI -->
       <div id="stepRegistrasi" style="display:none;">
         <div class="nama-box" style="display:block;">
           <div class="nama-label">Daftarkan Email untuk</div>
@@ -329,7 +331,6 @@
         <p class="err-msg" id="err-regis"></p>
       </div>
 
-      <!-- HASIL LOGIN -->
       <div class="hasil-wrap" id="hasil-wrap">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
           <p class="hasil-title" id="hasil-title" style="flex:1;margin-bottom:0;"></p>
@@ -432,8 +433,8 @@
 
 
 <script>
-// ✅ URL WEB APP YANG BENAR (dari file Code.gs Anda)
-var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxCi8Vvz4_Qo-_q5b_vzzcNP-A1g3Svjh6dVHuVT5-EOmR-bRtVt_o_esPoHcjrv8KrnA/exec";
+// ✅ URL WEB APP UPDATE TERBARU (Sudah Mengarah ke File Code.gs Anda yang Aktif)
+var WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxvobKQXr2BSDni30i9NHEn6AYenz4m5rqTAbrkYto31JUUX8xhJOjXJ3zrFscLFsS6-A/exec";
 
 // State
 var currentKode = "";
@@ -676,7 +677,7 @@ function ambilDataPetugas(kode, nama) {
             + ' onclick="tandaiSudahEdit(\'' + encodeURIComponent(kode) + '\',\'' + encodeURIComponent(item.no_rt) + '\',\'' + encodeURIComponent(item.no_responden) + '\',' + idx + ')">'
             + '<i class="ti ti-edit"></i> Edit di Kobo</a>';
         } else {
-          html += '<button class="hasil-link" style="opacity:0.4;cursor:not-allowed;" disabled>'
+          html += '<button class="hasil-link disabled-link" disabled>'
             + '<i class="ti ti-edit"></i> No Link</button>';
         }
 
