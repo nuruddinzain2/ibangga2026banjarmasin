@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portal iBangga 2026 — Kota Banjarmasin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #f5f6fa;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 1rem 3rem;
+  }
+  .wrap { width: 100%; max-width: 480px; }
+
+  .header {
+    text-align: center;
+    background: #fff;
+    border: 1px solid #e8eaf0;
+    border-radius: 16px;
+    padding: 1.75rem 1.5rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .logo-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: #1a4a8a;
+    border: 3px solid #4a7fc1;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1rem;
+    cursor: pointer;
+    transition: border-color .2s, transform .2s;
+  }
+  .logo-circle:hover { border-color: #f5c518; transform: scale(1.05); }
+  .logo-circle:active { transform: scale(0.95); }
+  .org { font-size: 12px; color: #6b7280; margin-bottom: 3px; }
+  .title { font-size: 17px; font-weight: 600; color: #111827; margin-bottom: 6px; }
+  .badge {
+    display: inline-block;
+    background: #dbeafe; color: #1e40af;
+    font-size: 11px; font-weight: 500;
+    padding: 3px 12px; border-radius: 99px; margin-bottom: 8px;
+  }
+  .slogan { font-size: 13px; color: #6b7280; font-style: italic; }
+
+  .sec {
+    font-size: 10px; font-weight: 600;
+    color: #9ca3af; text-transform: uppercase;
+    letter-spacing: .09em;
+    margin: 1.25rem 0 .5rem .25rem;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e8eaf0;
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  .btn {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px 16px;
+    text-decoration: none;
+    color: #111827;
+    cursor: pointer;
+    background: #fff;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: background .12s;
+  }
+  .btn:hover { background: #f9fafb; }
+  .btn.primary-btn { border: 2px solid #3b82f6; border-radius: 14px; }
+  .btn-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 20px;
+  }
+  .btn-body { flex: 1; }
+  .btn-label { font-size: 14px; font-weight: 500; color: #111827; }
+  .btn-desc { font-size: 12px; color: #6b7280; margin-top: 2px; }
+  .btn-arr { font-size: 16px; color: #9ca3af; }
+
+  .sub-panel { border-top: 1px solid #f3f4f6; }
+  .sub-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 11px 16px 11px 20px;
+    text-decoration: none;
+    color: #111827;
+    background: #fafafa;
+    border-bottom: 1px solid #f3f4f6;
+    transition: background .12s;
+  }
+  .sub-btn:last-child { border-bottom: none; }
+  .sub-btn:hover { background: #f3f4f6; }
+  .sub-icon {
+    width: 30px; height: 30px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 15px;
+  }
+  .sub-label { font-size: 13px; font-weight: 500; flex: 1; }
+
+  .disabled-btn {
+    display: flex; align-items: center; gap: 13px;
+    padding: 14px 16px;
+    opacity: .5; cursor: not-allowed;
+    background: #fff; border-radius: 14px;
+    border: 1px solid #e8eaf0;
+    margin-bottom: 10px;
+  }
+  .soon-badge {
+    font-size: 11px; background: #fef3c7; color: #92400e;
+    padding: 2px 9px; border-radius: 99px; white-space: nowrap;
+  }
+
+  .footer {
+    text-align: center; font-size: 11px; color: #9ca3af;
+    margin-top: 2rem;
+  }
+  @media (max-width: 400px) {
+    body { padding: 1rem .75rem 2rem; }
+    .btn-label { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <div class="logo-circle">
+      <div style="text-align:center;line-height:1.1;">
+        <div style="font-size:26px;font-weight:700;color:#f5c518;">OK</div>
+        <div style="font-size:9px;color:#a0c4f0;">PORTAL</div>
+      </div>
+    </div>
+    <p class="org">Dinas PPKBPM Kota Banjarmasin</p>
+    <p class="title">Indeks Pembangunan Keluarga</p>
+    <span class="badge">iBangga 2026</span>
+    <p class="slogan">"Maju Sejahtera"</p>
+  </div>
+
+  <p class="sec">Pendataan</p>
+
+  <a href="https://ee.kobotoolbox.org/x/ala3pXTY" target="_blank" class="btn primary-btn" style="margin-bottom:10px;">
+    <div class="btn-icon" style="background:#dbeafe;color:#1d4ed8;"><i class="ti ti-clipboard-list"></i></div>
+    <div class="btn-body">
+      <p class="btn-label">1. Input data</p>
+      <p class="btn-desc">Isi formulir pendataan keluarga</p>
+    </div>
+    <i class="ti ti-arrow-right btn-arr"></i>
+  </a>
+
+  <div class="card">
+    <a href="https://script.google.com/macros/s/AKfycbz6y9M6iUHdhSTbBgpqPl6H4Kf16ttJ9CGWtNi4vwYMKS547kb8ei4C2tGXDB-IJG9lbw/exec" target="_blank" class="btn">
+      <div class="btn-icon" style="background:#dcfce7;color:#166534;"><i class="ti ti-edit"></i></div>
+      <div class="btn-body">
+        <p class="btn-label">2. Edit data</p>
+        <p class="btn-desc">Buka dashboard pengeditan data</p>
+      </div>
+      <i class="ti ti-external-link btn-arr"></i>
+    </a>
+  </div>
+
+  <p class="sec">Kuesioner & Sampel</p>
+
+  <div class="card">
+    <a href="https://drive.google.com/file/d/1R-SaeNbuh8juSfG06e76K8Svbdezq-ha/view?usp=drive_link" target="_blank" class="btn">
+      <div class="btn-icon" style="background:#ede9fe;color:#5b21b6;"><i class="ti ti-file-description"></i></div>
+      <div class="btn-body">
+        <p class="btn-label">3. Contoh/dummy kuesioner</p>
+        <p class="btn-desc">Pratinjau formulir survei</p>
+      </div>
+      <i class="ti ti-external-link btn-arr"></i>
+    </a>
+  </div>
+
+  <div class="card">
+    <a href="https://docs.google.com/spreadsheets/d/1t4M9_qFsL7sapHTTgkhD20l3kWhtqEvvkx-vCSA9J9k/edit?usp=sharing" target="_blank" class="btn">
+      <div class="btn-icon" style="background:#fef3c7;color:#92400e;"><i class="ti ti-map-pin"></i></div>
+      <div class="btn-body">
+        <p class="btn-label">4. Daftar sampel RT terpilih</p>
+        <p class="btn-desc">Rukun tetangga sampel per wilayah</p>
+      </div>
+      <i class="ti ti-external-link btn-arr"></i>
+    </a>
+  </div>
+
+  <div class="card">
+    <a href="https://drive.google.com/drive/folders/1vyLwuORSaEaxO-q5Bkro53dpyBOhdBGc" target="_blank" class="btn">
+      <div class="btn-icon" style="background:#d1fae5;color:#065f46;"><i class="ti ti-users"></i></div>
+      <div class="btn-body">
+        <p class="btn-label">5. Daftar sampel rumah tangga</p>
+        <p class="btn-desc">Per kecamatan se-Kota Banjarmasin</p>
+      </div>
+      <i class="ti ti-external-link btn-arr"></i>
+    </a>
+  </div>
+
+  <p class="sec">Monitoring & Hasil</p>
+
+  <div class="card">
+    <a href="https://nuruddinzain2.github.io/dashboardibangga2026/" target="_blank" class="btn">
+      <div class="btn-icon" style="background:#dbeafe;color:#1d4ed8;"><i class="ti ti-table"></i></div>
+      <div class="btn-body">
+        <p class="btn-label">Monitoring lapangan</p>
+        <p class="btn-desc">Progres penginputan data</p>
+      </div>
+      <i class="ti ti-external-link btn-arr"></i>
+    </a>
+  </div>
+
+  <div class="disabled-btn">
+    <div class="btn-icon" style="background:#fef3c7;color:#92400e;"><i class="ti ti-chart-bar"></i></div>
+    <div class="btn-body">
+      <p class="btn-label">Hasil sementara iBangga 2026</p>
+      <p class="btn-desc">Indeks total & tiga dimensi</p>
+    </div>
+    <span class="soon-badge">Segera</span>
+  </div>
+
+  <p class="footer">© 2026 Dinas PPKBPM Kota Banjarmasin · iBangga</p>
+</div>
+</body>
+</html>
